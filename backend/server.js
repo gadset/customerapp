@@ -33,7 +33,7 @@ app.get('/', function (req, res) {
     async function start() {
         devices = await catalog.getBrands();
         res.json(devices);
-        //console.log(devices);
+        console.log(devices);
     }
     start();
     
@@ -49,7 +49,7 @@ app.get('/', function (req, res) {
     async function start() {
         devices = await catalog.getBrand(name);
         res.json(devices);
-        //console.log(devices);
+        console.log(devices);
     }
     start();
  
@@ -65,7 +65,7 @@ app.get('/', function (req, res) {
      async function start() {
          devices = await catalog.getDevice(name);
          res.json(devices);
-         console.log(devices);
+        console.log(devices);
         //  console.log(devices['detailSpec'][1]['specifications'][1]['value'])
         //  console.log(devices['detailSpec'][1]['specifications'][0]['value'])
         //  console.log(devices['detailSpec'][12])
