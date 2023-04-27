@@ -43,12 +43,14 @@ const DateTimePickerPage = ({onDate, handlenextpage}) => {
     handlenextpage();
   }
   return (
-    <Box sx={{ width: "100%" }}>
+    <Grid container sx={{marginLeft: 0, marginTop : '10px', width: "100%", display:'flex', flexDirection:'column', alignItems:'center' , marginBottom: '16px',}}>
       <Typography variant="h6" sx={{ mb: 2 }}>
         Select Date and Time
       </Typography>
-      <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
+
+        <Grid container spacing={2} sx={{ width:'80%',padding: '8px',
+    backgroundColor : '#c8dee6',
+    borderRadius : '10px' }}>
           <Grid item xs={12}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DesktopDatePicker
@@ -87,8 +89,8 @@ const DateTimePickerPage = ({onDate, handlenextpage}) => {
             Next
           </Button>
         </Box>
-      </form>
-    </Box>
+
+    </Grid>
   );
 };
 

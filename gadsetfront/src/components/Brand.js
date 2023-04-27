@@ -1,25 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { getDatabase, ref, child, get } from "firebase/database";
-import { Card, Grid, Typography } from '@mui/material';
+import { Card, CardMedia, Grid, Typography,Pagination } from '@mui/material';
 import { useLocation, useHistory, Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { setModelValue } from '../reduxstore';
 import ResponsiveAppBar from '../Navbar/Navbar';
 import { makeStyles } from "@mui/styles";
+import Loader from "react-js-loader";
 
 const useStyles = makeStyles({
   root: {
     display :'flex',
   //  padding: "8px",
     flexDirection:'column',
-  //  justifyContent: "center",
+ justifyContent: "center",
     alignItems: "center",
-   // textAlign: "center",
  //   margin: "16px",
    // marginLeft:'8px'
   // maxWidth: '90%'
   },
 card1 :{
+  width : '250px',
+  display:'flex',
+  flexDirection:'column',
+  alignItems : 'center',
+  justifyContent:'center',
+  padding:'8px',
   '&:hover': {
     cursor: 'pointer',
     transform: 'scale(1.015)',
@@ -37,9 +43,42 @@ const Brand = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const classes = useStyles();
+    const [phones, setphone]= useState([]);
+    const [page, setPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(20);
+  
+    const handleChangePage = (event, newPage) => {
+      setPage(newPage);
+    };
+  
+    const handleChangeRowsPerPage = (event) => {
+      setRowsPerPage(parseInt(event.target.value, 10));
+      setPage(1);
+    };
+  
+    const startIndex = (page - 1) * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+    const slicedData = phones.slice(startIndex, endIndex);
+
+    async function handleselectdevice(){
+      const response = await fetch('http://172.31.8.120:8000/search?phone=' + brand, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+          },
+         
+        });
+        const json = await response.json();
+        console.log(json)
+        setphone(json);
+        
+        //console.log(phonelast)
+    }
    
 
     useEffect(() => {
+      handleselectdevice();
         const dbRef = ref(getDatabase());
         get(child(dbRef, brand)).then((snapshot) => {
             if (snapshot.exists()) {
@@ -55,30 +94,35 @@ const Brand = () => {
       }, []);
 
     const handlemodelclick = (model) => {
-dispatch(setModelValue(model));
+dispatch(setModelValue(model['name']));
 history.push({
   pathname : '/selectissue',
-  state : model
+  state : model['name']
 })
     }
 
 
 return(
-    <Grid container className={classes.root}>
-      <ResponsiveAppBar/>
-      <Typography style={{ color: '#056AB5', padding:'8px', margin:'8px'}}> Select Model </Typography>
-      <Grid container spacing={2} style={{padding:'8px'}}>
+    <Grid container spacing={2}  sx={{ marginLeft: 0, marginTop : '10px' }} className={classes.root}>
+      {phones.length > 0 ? <div style={{width:'80%', display:'flex', flexDirection:'column', alignItems:'center'}}>
+      <Typography style={{ color: '#056AB5', padding:'8px', margin:'8px', textAlign:'left'}}>Select Model </Typography>
+      <Grid container spacing={2} style={{padding:'8px', margin:'8px', alignItems :'start', display:'flex'}}>
     {
-        data ? 
-       Object.keys(data).map((model, i)=> (
+        phones.length > 0 ? 
+       slicedData.map((model, i)=> (
       
-        <Grid item md={3} xs={5} style={{margin:3}}>
+        <Grid item md={2} xs={6} style={{ display:'flex',justifyContent:'center', alignItems :'center', margin:3,}}>
             {/* <Link to={{pathname:'/selectissue', 
           state : model}}> */}
-        <Card className={classes.card1}  elevation={1} onClick={() =>handlemodelclick(model)}>
-        <Typography> {model}-- </Typography>
-            <Typography> {data[model].color}</Typography>
-            <Typography> {data[model].screen['discounted']}</Typography>
+        <Card className={classes.card1}  elevation={3} onClick={() =>handlemodelclick(model)}>
+        
+        <CardMedia
+        component="img"
+         image={model['img']}
+                  title={model['name']}
+                 sx={{ height: '100px', width:'80px'}} 
+                />
+            <Typography> {model['name']}</Typography>
             </Card>
             {/* </Link> */}
             </Grid>
@@ -88,6 +132,18 @@ return(
         <></>
     }
     </Grid>
+    <Pagination
+        count={Math.ceil(phones.length / rowsPerPage)}
+        page={page}
+        onChange={handleChangePage}
+        showFirstButton
+        showLastButton
+        variant="outlined"
+        shape="rounded"
+      />
+      </div> :
+       <Loader type="spinner-circle" bgColor={"#056AB5"} title={"Loading Models"} color={'#056AB5'} size={100} /> }
+
     </Grid>
 
 )

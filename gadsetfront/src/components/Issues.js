@@ -100,19 +100,17 @@ const useStyles = makeStyles((theme) => ({
   
     return (
       <Grid container className={classes.root}>
-        <ResponsiveAppBar/>
         <Typography style={{ color: '#056AB5', padding:'8px', margin:'8px'}}> Select Issue </Typography>
         <Grid container spacing={2} style={{display : 'flex', justifyContent:'center', margin:4}}>
         {issues.map((issue) => (
-            <Grid item md={8} xs={8} className={classes.grid1}  >
+            <Grid item md={7} xs={12} className={classes.grid1}  >
           <Card>
           <Accordion>
-          
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <img src={glass} alt="Glass Replacement" />
-            <Box style={{display : 'flex', flexDirection : 'column'}}>
+            <Box style={{display : 'flex', flexDirection : 'column', justifyContent:'center', alignItems:'center'}}>
               <Typography className={classes.issue}>{issue.name}</Typography>
-              <Typography className={classes.description}>The glass on my device is cracked and needs to be replaced. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed pellentesque turpis vel ligula vestibulum, quis bibendum felis semper.</Typography>
+              <Typography className={classes.description}>{issue.description}</Typography>
             </Box>
             </AccordionSummary>
             <AccordionDetails>
@@ -129,7 +127,7 @@ const useStyles = makeStyles((theme) => ({
           </Grid>
         ))}
 
-<Grid item md={8} xs={8} className={classes.grid1} >
+<Grid item md={7} xs={12} className={classes.grid1} >
     <Card style={{backgroundColor : '#056AB5', color: '#fff', textAlign :'start', display:'flex', flexDirection:'row'}}>
         <CardContent>
             <Box style={{justifyContent : 'start'}}>
@@ -148,12 +146,12 @@ const useStyles = makeStyles((theme) => ({
     </Grid>
 
 
-    <Grid item md={8} xs={8} className={classes.grid1} >
+    <Grid item md={7} xs={12} className={classes.grid1} >
     <Card style={{textAlign :'center', display:'flex', flexDirection:'column', justifyContent:'center'}}>
-       <Typography variant='h5' style={{margin:3}}> Selected Issue </Typography>
+       <Typography variant='h5' style={{margin:3}}>Selected Issue(s) </Typography>
         <CardContent>
         <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650, margin:'4px' }} aria-label="simple table">
+      <Table  aria-label="simple table">
       <TableBody>
           {arr.map((row) => (
             <TableRow

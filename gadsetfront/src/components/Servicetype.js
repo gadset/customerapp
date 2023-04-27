@@ -24,12 +24,13 @@ padding : '8px'
       display :'flex',
     //  padding: "8px",
       flexDirection:'column',
-    // justifyContent: "center",
+     justifyContent: "center",
       alignItems: "center",
      // textAlign: "center",
    //   margin: "16px",
      // marginLeft:'8px'
     // maxWidth: '90%'
+    width:'80%'
     },
      sub:{
       //display :'flex',
@@ -37,7 +38,7 @@ padding : '8px'
        margin : '8px',
      //  maxWidth:'80%',
         flexDirection:'column',
-       // justifyContent: "center",
+        justifyContent: "center",
         alignItems: "center",
      }
   }));
@@ -57,19 +58,18 @@ padding : '8px'
 
    const handlenextpage = () => {
     history.push({
-      pathname:'/stepper',
-      state : {mod : mod, issue : iss}
+      pathname:'/phonen',
+      //state : {mod : mod, issue : iss}
     })
    }
 
     return(
         <Grid container className={classes.root}>
-          <ResponsiveAppBar/>
           <Typography style={{ color: '#056AB5', padding:'8px', margin:'8px'}}> Select Service Type </Typography>
           {/* <Grid container spacing={2} className={classes.sub}>  */}
-          <Box sx={{ width: '100%', margin:4}}>
-          <Stack spacing={2}>
-            <Grid item md={6} xs={12}>
+     
+          <Grid container spacing={2} className={classes.sub}>
+            <Grid item md={7} xs={12}>
               {/* <Link to={{pathname:'/stepper', mod : mod, issue : iss}}> */}
                 <Card className={classes.card}  onClick={handlenextpage}>
                 <CardMedia
@@ -85,7 +85,7 @@ padding : '8px'
                 </Card>
                 {/* </Link> */}
             </Grid>
-            <Grid item md={6} xs={12}>
+            <Grid item md={7} xs={12}>
                 <Card className={classes.card} >
                 <CardMedia
                     component="img"
@@ -99,7 +99,7 @@ padding : '8px'
                 <Button color='primary' variant='contained'>Book service</Button>
                 </Card>
             </Grid>
-            <Grid item md={6} xs={12}>
+            <Grid item md={7} xs={12}>
                 <Card className={classes.card} >
                 <CardMedia
                     component="img"
@@ -113,9 +113,10 @@ padding : '8px'
                 <Button color='primary' variant='contained'>Book service</Button>
                 </Card>
             </Grid>
-            </Stack>
-            </Box>
+            </Grid>
+
             {/* </Grid> */}
+         
 
         </Grid>
 

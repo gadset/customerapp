@@ -26,6 +26,10 @@ export default function PriceSummary({handlenextpage}){
  const handleclicked = () => {
   handlenextpage();
  }
+
+ const handletotal = (e) => {
+  total = total + e;
+ }
   const tip = ['50', '100', '500'];
     //const Issues = issue;
     var total = 0;
@@ -33,14 +37,15 @@ export default function PriceSummary({handlenextpage}){
        total += issues1[i]['cost'];
       }
     const gst = total/10 ;
+    total = gst + total;
     return(
-        <Grid container sx={{display:'flex', flexDirection:'column', margin:'8px', padding:'8px'}}>
-            <Typography variant="h5">Price Summary</Typography>
+        <Grid container spacing={2} sx={{width:'100%', display:'flex', flexDirection:'column',alignItems:'center', justifyContent:'center', padding:'8px', marginLeft: 0, marginTop : '10px',}}>
+            <Typography variant="h5">Price Summary </Typography>
             <Typography>Selected Device : {model1}</Typography>
-            <Grid item>
-                <Typography variant="h6"> Selected Issue </Typography>
+            <Grid item sx={{width:'70%', display:'flex', flexDirection:'column', justifyContent:'start',alignItems:'start',margin:'8px', padding:'8px'}}>
+                <Typography variant="h6" sx={{margin:'8px'}}>Selected Issue(s) </Typography>
                 <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 400 }} aria-label="simple table">
+      <Table aria-label="simple table">
       <TableBody>
           {issues1.map((row) => (
             <TableRow
@@ -72,24 +77,20 @@ export default function PriceSummary({handlenextpage}){
       </Table>
     </TableContainer>
 
-    <Grid item>
-      <Typography>Add tip to the technician</Typography>
+    <Grid item sx={{marginTop : '8px'}}>
+      <Typography sx={{margin:'8px'}}>Add tip to the technician</Typography>
       <Stack direction="row" spacing={2}>
         {
           tip.map((t, index) => (
-            <Chip label={t}/>
+            <Chip label={t} onClick={() => handletotal(t)}/>
           ))
         }
 
       </Stack>
     </Grid>
 
-    <FormControlLabel
-        control={<Checkbox checked={isChecked} onChange={handleCheckboxChange} />}
-        label="I accept the terms and conditions"
-      />
-    
-    <Grid item>
+
+    <Grid item sx={{marginTop : '8px', padding:'8px'}}>
       <Box sx={{display:'flex', flexDirection:'row'}}>
         <img src={address} alt="address icon" />
         <div>
@@ -99,7 +100,7 @@ export default function PriceSummary({handlenextpage}){
       </Box>
     </Grid>
 
-    <Grid item>
+    <Grid item sx={{marginTop : '8px', padding:'8px'}}>
       <Box sx={{display:'flex', flexDirection:'row'}}>
         <img src={calendar} alt="address icon" />
         <div>
@@ -107,6 +108,13 @@ export default function PriceSummary({handlenextpage}){
         </div>
       </Box>
     </Grid>
+
+
+    <FormControlLabel
+        control={<Checkbox checked={isChecked} onChange={handleCheckboxChange} />}
+        label="I accept the terms and conditions"
+      />
+    
     
             </Grid>
             <Button type="submit" variant="contained" color="primary" onClick={handlenextpage} disabled={!isChecked}>

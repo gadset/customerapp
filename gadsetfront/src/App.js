@@ -17,11 +17,20 @@ import ServiceType from "./components/Servicetype";
 import AddressForm from "./components/Address";
 import DateTimePickerPage from "./components/DateTime";
 import StepperForm from "./components/Stepper";
+import PhoneSignUp from "./Login/PhoneSignup";
+import PhoneIcon from '@mui/icons-material/Phone';
+import PaymentSuccessful from "./components/paymentsuccessful";
 export default function App() {
   return (
     <Router>
       <center>
-       <div className="App" style={{justifyContent:'center'}}>
+       <div className="App" style={{justifyContent:'center', display:'flex', flexDirection:'column'}}>
+        <ResponsiveAppBar/>
+        <div  className="telephone-icon">
+        <a href="tel:+918688749458" aria-label="Call us">
+        <PhoneIcon sx={{ color: 'white' }} />
+    </a>
+        </div>
         
         {/* <nav>
           <ul>
@@ -87,6 +96,12 @@ export default function App() {
           </Route>
           <Route path='/stepper'>
             <StepperForm/>
+          </Route>
+          <Route path='/phonen'>
+            <PhoneSignUp/>
+          </Route>
+          <Route path='/paymentsuccess'>
+            <PaymentSuccessful/>
           </Route>
         </Switch>
       </div> 

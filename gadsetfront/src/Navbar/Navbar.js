@@ -106,9 +106,9 @@ const isMobile = width <= 768;
 
 
   return (
-    <Grid container style={{display : 'flex', margin :20}}>
+    <Grid container style={{display : 'flex'}}>
     <AppBar position="static" color="transparent" style={{marginTop:0}}>
-      <Container maxWidth="xl">
+      <Container maxWidth="xl" style={{width : '90%'}}>
         <Toolbar disableGutters>
           <Typography
             variant="h6"
@@ -206,7 +206,8 @@ const isMobile = width <= 768;
             ))} */}
             <Button
                 key='home'
-                onClick={handleCloseNavMenu}
+               // onClick={handleCloseNavMenu}
+               onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'primary', display: 'block' }}
               >
                 Home

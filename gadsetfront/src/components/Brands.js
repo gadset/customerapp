@@ -8,7 +8,7 @@ import {
     Box,
   } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import apple from '../logos/apple.svg';
 import mi from '../logos/mi.svg';
 import motorola from '../logos/motorola.svg';
@@ -28,14 +28,16 @@ const useStyles = makeStyles({
     display :'flex',
   //  padding: "8px",
     flexDirection:'column',
-  //  justifyContent: "center",
+    justifyContent: "center",
     alignItems: "center",
-   // textAlign: "center",
+   textAlign: "left",
  //   margin: "16px",
    // marginLeft:'8px'
   // maxWidth: '90%'
   },
 card1 :{
+  padding:'8px',
+  maxHeight : '150px',
   '&:hover': {
     cursor: 'pointer',
     transform: 'scale(1.015)',
@@ -51,11 +53,13 @@ const Brands = () => {
 
 const history = useHistory();
 const classes = useStyles();
-
+const [data, setData] = useState([]);
 const handlebrandclick = (lo) => {
+  let obj = data.find(o => o.name === lo['name']);
+  console.log(obj)
   history.push({
     pathname : `/brand/` + lo['name'],
-                state : lo['name']
+    state : obj['id']
   })
 }
 
@@ -70,28 +74,36 @@ get(child(dbRef, `apple`)).then((snapshot) => {
   console.error(error);
 });
 
-    const data = [
-        {"name" : "apple" , "logo" : apple},
-        {"name" : "mi", "logo" :mi },
-        {"name" : "motorola", "logo" :motorola },
-        {"name" : "nothing" , "logo" : nothing},
-        {"name" : "oneplus", "logo" : oneplus },
-        {"name" : "oppo", "logo" : oppo},
-          {"name" : "poco", "logo" : poco},
-          {"name" : "realme" , "logo" : realme },
-          {"name" : "samsung", "logo" :samsung },
-          {"name" : "vivo", "logo" :vivo },
+useEffect(() => {
+  fetch('http://172.31.8.120:8000/')
+  .then((response) => response.json())
+  .then((data) => setData(data));
+  console.log(data)
+}, []);
+
+
+    const data1 = [
+        {"name" : "Apple" , "logo" : apple},
+        {"name" : "Xiaomi", "logo" :mi },
+        {"name" : "Motorola", "logo" :motorola },
+        {"name" : "Nothing" , "logo" : nothing},
+        {"name" : "OnePlus", "logo" : oneplus },
+        {"name" : "Oppo", "logo" : oppo},
+          {"name" : "Poco", "logo" : poco},
+          {"name" : "Realme" , "logo" : realme },
+          {"name" : "Samsung", "logo" :samsung },
+          {"name" : "Vivo", "logo" :vivo },
 
 
     ]
     return(
-        <Grid container className={classes.root}>
-         <ResponsiveAppBar/>
-         <Typography style={{ color: '#056AB5', padding:'8px', margin:'8px'}}> Select Brand </Typography>
-         <Grid container>
+        <Grid container spacing={2}  sx={{ marginLeft: 0, marginTop : '10px' }} className={classes.root}>
+          <div style={{width : '80%'}}>
+         <Typography variant="h6" style={{ color: '#056AB5',fontFamily:'Poppins', fontStyle:'normal', padding:'8px', margin:'8px'}}> Select Brand </Typography>
+         <Grid container spacing={2}>
             {
-                data.map((lo) => (
-            <Grid item xs={5} md={2} style={{ display:'flex',justifyContent:'center', alignItems :'center', margin:3, flexDirection:'row'}}>
+                data1.map((lo) => (
+            <Grid item xs={5} md={2} style={{ display:'flex',justifyContent:'center', alignItems :'center', margin:3, flexDirection:'row', textAlign:'center'}}>
               {/* <Link to = {{
                 pathname : `/brand/` + lo['name'],
                 state : lo['name']
@@ -111,6 +123,7 @@ get(child(dbRef, `apple`)).then((snapshot) => {
                 ))
             }
           </Grid>
+          </div>
         </Grid>
     )
 }

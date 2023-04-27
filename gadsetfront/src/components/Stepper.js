@@ -5,7 +5,7 @@ import {
   StepLabel,
   Button,
   Typography,
-  StepContent, StepConnector
+  StepContent, StepConnector, Grid
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import AddressForm from "./Address";
@@ -53,8 +53,8 @@ export default function StepperForm() {
   const [activeStep, setActiveStep] = useState(0);
   ///const steps = getSteps();
   const location = useLocation();
-  const model = location.model;
-  const issue = location.issue;
+  //const model = location.model;
+  //const issue = location.issue;
   //console.log(issue);
   const model1 = useSelector((state) => state.model.value)
   const issues1 = useSelector((state) => state.issues.value)
@@ -96,7 +96,7 @@ export default function StepperForm() {
     },
     {
       label: 'Price Summary',
-      component: <PriceSummary model={model} issue={issue} addres={address} datetime={Datetime} />,
+      component: <PriceSummary model={model1} issue={issues1} addres={address} datetime={Datetime} />,
     },
     {
       label : 'Payment',
@@ -121,8 +121,7 @@ export default function StepperForm() {
   }
 
   return (
-    <div className={classes.root}>
-      <ResponsiveAppBar/>
+    <Grid sx={{ marginLeft: 0, marginTop : '10px' }} className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel connector={<StepConnector />}>
         {steps.map((step,index) => (
           <Step key={step.label}>
@@ -166,6 +165,6 @@ export default function StepperForm() {
           </div>
         )}
       </div>
-    </div>
+    </Grid>
   );
 }

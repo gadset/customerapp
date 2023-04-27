@@ -9,10 +9,19 @@ import theme from './theme';
 import reportWebVitals from './reportWebVitals';
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
+import { getAuth } from "firebase/auth";
 const firebaseConfig = {
   // ...
   // The value of `databaseURL` depends on the location of the database
-  databaseURL: "https://gadset-customer-default-rtdb.asia-southeast1.firebasedatabase.app/",
+ // databaseURL: "https://gadset-customer-default-rtdb.asia-southeast1.firebasedatabase.app/",
+  apiKey: "AIzaSyBULQBdwnrNopZghLLXL1dHrPZvRDXMe68",
+  authDomain: "gadset-customer.firebaseapp.com",
+  databaseURL: "https://gadset-customer-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "gadset-customer",
+  storageBucket: "gadset-customer.appspot.com",
+  messagingSenderId: "853423138437",
+  appId: "1:853423138437:web:eb298cd5e3159a6e1aabec",
+  measurementId: "G-J8Z28LEYJ5"
 };
 
 // Initialize Firebase
@@ -21,6 +30,7 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Realtime Database and get a reference to the service
 const database = getDatabase(app);
+export const auth = getAuth(app);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

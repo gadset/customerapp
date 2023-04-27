@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
+import { Link , useHistory, useLocation} from 'react-router-dom';
 import {
   Card,
   CardContent,
@@ -24,38 +25,93 @@ import whowe from "../Images/whowe.svg";
 import faq from "../Images/faq.svg";
 import tablet from "../Images/tablet.svg";
 import ResponsiveAppBar from "../Navbar/Navbar";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const useStyles = makeStyles({
   root: {
     display :'flex',
-    padding: "8px",
+    //padding: "8px",
     //  flexDirection:'column',
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
-    margin: "16px",
-   // marginLeft:'8px'
+    //margin: "16px",
+   //marginLeft:0,
+   //marginTop:0
   // maxWidth: '90%'
   },
-  con: {
+  conta : {
     display: "flex",
-    //  flexDirection:'column',
+      flexDirection:'column',
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
     //alignContent:'center',
-    margin : '16px',
+   // margin : '16px',
+   width : '80%',
+  },
+  con: {
+    display: "flex",
+     // flexDirection:'column',
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    //alignContent:'center',
+   // margin : '16px',
+   marginBottom: '16px',
+   padding: '8px',
+   backgroundColor : '#c8dee6',
+   borderRadius : '10px'
 
+  },
+  con1: {
+    display: "flex",
+     // flexDirection:'column',
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    //alignContent:'center',
+   // margin : '16px',
+   marginBottom: '16px',
+   padding: '8px',
   },
   heading : {
     color: '#056AB5',
     //fontSize : '20px',
-    margin : '8px'
+    margin : '8px',
+    padding : '8px'
+  },
+  modelcard : {
+    '&:hover': {
+      cursor: 'pointer',
+      transform: 'scale(1.015)',
+      transition: '0.15s linear',
+      boxShadow:' 1px 1px 22px rgba(157, 184, 209, 0.5)',
+  color : ' #604CA5',  
+   },
   }
 });
 
 const HomePage = () => {
   const classes = useStyles();
+  const history = useHistory();
+
+  const showtoast = () => {
+    toast('warning', "This feature is not built yet.")
+  }
+  const handleClick = (device) => {
+    if(device == 'Phone'){
+      history.push({
+        pathname:'/brands',
+        //state : {mod : mod, issue : iss}
+      })
+    }
+ else{
+  toast("This feature is not built yet.");
+ }
+  }
   const devices = [
     { name: "Phone", img: mobile },
     { name: "Laptop", img: laptop },
@@ -85,28 +141,29 @@ const HomePage = () => {
     },
   ];
   return (
-    <Grid container spacing={2} className={classes.root}>
-      <ResponsiveAppBar/>
-      <Grid container className={classes.con} style={{ flexDirection: "row" }}>
+    <Grid container spacing={2} sx={{ marginLeft: 0, marginTop : 0 }} className={classes.root}>
+      <div className={classes.conta}>
+      <ToastContainer />
+      <Grid container item spacing={2} sx={{ marginLeft: 0, marginTop : '10px' }} className={classes.con} style={{ flexDirection: "row" }}>
         <Grid item xs={12} md={6}>
           <img src={octopus} alt="Your" style={{ width: "80%" }} />
         </Grid>
         <Grid item xs={12} md={6} style={{  justifyContent:'center' }}>
-          <Typography variant="h6" align="left">
+          <Typography variant="h6" align="left" style={{color: '#056AB5',fontFamily:'Poppins', fontStyle:'normal', padding:'8px', margin:'8px'}}>
             Multi-Brand Online Mobile Repair in Bangalore
           </Typography>
-          <Typography variant="h5" align="left">
+          <Typography variant="h5" align="left" style={{color: '#056AB5',fontFamily:'Poppins', fontStyle:'normal', padding:'8px', margin:'8px'}}>
             Door Step Mobile Repair Service
           </Typography>
         </Grid>
       </Grid>
 
-      <Grid container className={classes.con} style={{ flexDirection: "column", margin:'8px' }}>
+      <Grid container className={classes.con1}  sx={{ marginLeft: 0, marginTop : '10px' }} style={{ flexDirection: "column" }}>
         <Typography variant="h5" className={classes.heading}> Select Device </Typography>
         <Grid container spacing={2} style={{ flexDirection: "row",display:'flex',justifyContent:'center',alignItems :'center', marginTop:8}}>
           {devices.map((device) => (
-            <Grid item xs={5} md={2} style={{border: '1px solid #EFEFEF', background: 'rgba(223, 213, 236, 0.15)', display:'flex',justifyContent:'center', alignItems :'center', margin:3}}>
-              <Card elevation={0} style={{ background: 'rgba(223, 213, 236, 0.15)',}}>
+            <Grid item xs={5} md={2} className={classes.modelcard} onClick={() =>handleClick(device['name'])} spacing={2} style={{border: '1px solid #EFEFEF', background: 'rgba(223, 213, 236, 0.15)', display:'flex',justifyContent:'center', alignItems :'center', margin:3}}>
+              <Card elevation={0} style={{ background: 'transparent',}}>
                 <CardMedia
                   image={device["img"]}
                   title={device["name"]}
@@ -124,6 +181,7 @@ const HomePage = () => {
       <Grid
         container
         className={classes.con}
+        sx={{ marginLeft: 0, marginTop : '10px' }}
         style={{ flexDirection: "column" }}
       >
         <Grid item>
@@ -137,7 +195,7 @@ const HomePage = () => {
                   sx={{
                     display: "flex",
                     padding: 1,
-                    minHeight: "10vh",
+                    height: "12vh",
                     borderRadius: "5px",
                     border: "1px solid #436BB0",
                     boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
@@ -164,7 +222,7 @@ const HomePage = () => {
                   sx={{
                     display: "flex",
                     padding: 1,
-                    minHeight: "10vh",
+                    height: "12vh",
                     borderRadius: "5px",
                     border: "1px solid #436BB0",
                     boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
@@ -192,7 +250,8 @@ const HomePage = () => {
 
         <Grid
           container
-          className={classes.con}
+          className={classes.con1}
+          sx={{ marginLeft: 0, marginTop : '10px' }}
           style={{ flexDirection: "column" }}
         >
           <Grid item>
@@ -226,6 +285,7 @@ const HomePage = () => {
           container
           spacing={2}
           className={classes.con}
+          sx={{ marginLeft: 0, marginTop : '10px' }}
           style={{ flexDirection: "column" }}
         >
           <Typography variant="h5" className={classes.heading}> FAQ ?</Typography>
@@ -253,6 +313,7 @@ const HomePage = () => {
             </Grid>
           ))}
         </Grid>
+        </div>
       </Grid>
   );
 };
