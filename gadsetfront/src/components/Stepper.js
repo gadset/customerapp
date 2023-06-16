@@ -19,6 +19,8 @@ import ResponsiveAppBar from "../Navbar/Navbar";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
+    justifyContent:'flex-start',
+    alignItems:'start'
   },
   button: {
     marginRight: theme.spacing(1),
@@ -58,8 +60,9 @@ export default function StepperForm() {
   //console.log(issue);
   const model1 = useSelector((state) => state.model.value)
   const issues1 = useSelector((state) => state.issues.value)
-  console.log(model1);
-  console.log(issues1);
+  const total = location.state.total;
+  console.log(total);
+  const mobile = useSelector((state)=> state.mobile.value);
   const [address, setAddress] = useState({});
   const [Datetime, setDate]= useState({});
 
@@ -96,7 +99,7 @@ export default function StepperForm() {
     },
     {
       label: 'Price Summary',
-      component: <PriceSummary model={model1} issue={issues1} addres={address} datetime={Datetime} />,
+      component: <PriceSummary model={model1} issue={issues1} addres={address} datetime={Datetime} mobile={mobile} />,
     },
     {
       label : 'Payment',
@@ -121,11 +124,11 @@ export default function StepperForm() {
   }
 
   return (
-    <Grid sx={{ marginLeft: 0, marginTop : '10px' }} className={classes.root}>
+    <Grid sx={{ marginLeft: 0, marginTop : '10px', marginBottom:'30px' }} className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel connector={<StepConnector />}>
         {steps.map((step,index) => (
           <Step key={step.label}>
-            <StepLabel>{step.label}</StepLabel>
+            <StepLabel style={{fontSize : '10px',fontFamily:'Open sans', fontStyle:'normal', margin:'8px',lineHeight : '14px', fontWeight :400}}>{step.label}</StepLabel>
           </Step>
         ))}
       </Stepper>

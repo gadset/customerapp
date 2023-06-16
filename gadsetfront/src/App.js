@@ -1,4 +1,4 @@
-import React from "react";
+import React , { useState, useEffect} from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -20,18 +20,42 @@ import StepperForm from "./components/Stepper";
 import PhoneSignUp from "./Login/PhoneSignup";
 import PhoneIcon from '@mui/icons-material/Phone';
 import PaymentSuccessful from "./components/paymentsuccessful";
+import Footer from "./Navbar/Footer";
+import Chatbot from "./Bot/chatbot";
+import ChatIcon from '@mui/icons-material/Chat';
+import { Grid } from "@mui/material";
+import FixedNavigation from "./Navbar/BottomNav";
+import Bidding from "./components/Biddingpage";
 export default function App() {
+  const [width, setWidth] = useState(window.innerWidth);
+
+  function handleWindowSizeChange() {
+      setWidth(window.innerWidth);
+  }
+  useEffect(() => {
+      window.addEventListener('resize', handleWindowSizeChange);
+      return () => {
+          window.removeEventListener('resize', handleWindowSizeChange);
+      }
+  }, []);
+  const isMobile = width <= 768;
+
   return (
     <Router>
       <center>
-       <div className="App" style={{justifyContent:'center', display:'flex', flexDirection:'column'}}>
+       <Grid className="App" style={{justifyContent:'center', display:'flex', flexDirection:'column', width : isMobile ? '100%' : '400px'}}>
         <ResponsiveAppBar/>
-        <div  className="telephone-icon">
+        {/* <div  className="telephone-icon">
         <a href="tel:+918688749458" aria-label="Call us">
         <PhoneIcon sx={{ color: 'white' }} />
-    </a>
+        </a>
         </div>
         
+        <div  className="chat-icon">
+        <a href="/chatbot" aria-label="Call us">
+        <ChatIcon sx={{ color: 'white' }} />
+        </a>
+        </div> */}
         {/* <nav>
           <ul>
             <li>
@@ -60,6 +84,7 @@ export default function App() {
             </li>
           </ul>
         </nav> */}
+        <Grid style={{width:'100%'}}>
         <Switch>
           <Route path="/about">
            <SelectPhone/>
@@ -103,8 +128,18 @@ export default function App() {
           <Route path='/paymentsuccess'>
             <PaymentSuccessful/>
           </Route>
+          <Route path='/chatbot'>
+            <Chatbot/>
+          </Route>
+          <Route path='/getbid'>
+            <Bidding/>
+          </Route>
         </Switch>
-      </div> 
+        </Grid>
+        <div style={{position: 'fixed', bottom: 0, left: 0, right: 0 }}>
+<FixedNavigation />
+</div>
+      </Grid> 
       </center>
      
    </Router>

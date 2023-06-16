@@ -11,6 +11,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {DesktopDatePicker} from "@mui/x-date-pickers/DesktopDatePicker";
 import {DesktopTimePicker} from "@mui/x-date-pickers/DesktopTimePicker";
+import { DateTimePicker } from "@mui/x-date-pickers";
 import { format } from "date-fns";
 import { useDispatch } from "react-redux";
 import { setDateValue } from "../reduxstore";
@@ -43,31 +44,38 @@ const DateTimePickerPage = ({onDate, handlenextpage}) => {
     handlenextpage();
   }
   return (
-    <Grid container sx={{marginLeft: 0, marginTop : '10px', width: "100%", display:'flex', flexDirection:'column', alignItems:'center' , marginBottom: '16px',}}>
-      <Typography variant="h6" sx={{ mb: 2 }}>
-        Select Date and Time
+    <Grid container sx={{marginLeft: 0, marginTop : '4px', width: "100%", display:'flex', flexDirection:'column', marginBottom: '16px',alignItems:'center',
+    justifyContent:'flex-start'}}>
+      <Typography style={{color: '#056AB5',fontSize : '16px',fontFamily:'Poppins', fontStyle:'normal', margin:'8px',lineHeight : '24px', fontWeight :600}}>
+        Choose a day and time
       </Typography>
-
-        <Grid container spacing={2} sx={{ width:'80%',padding: '8px',
-    backgroundColor : '#c8dee6',
+        <Grid container spacing={2} sx={{ width:'90%',padding:'8px',
     borderRadius : '10px' }}>
-          <Grid item xs={12}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DesktopDatePicker
                 label="Select Date"
                 value={selectedDate}
                 minDate={new Date()}
+                sx={{background: '#EDECEC',
+                border: '1px solid rgba(170, 168, 168, 0.6)',
+                boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
+                borderRadius: '10px',
+                width:'100%', margin :'8px'}}
                 onChange={(date) => setSelectedDate(date)}
-                renderInput={(params) => <TextField {...params} />}
+                renderInput={(params) => <TextField {...params}
+                />}
               />
             </LocalizationProvider>
-          </Grid>
-          <Grid item xs={12}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DesktopTimePicker
                 label="Select Time"
                 value={selectedTime}
                 onChange={(time) => setSelectedTime(time)}
+                sx={{background: '#EDECEC',
+                border: '1px solid rgba(170, 168, 168, 0.6)',
+                boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
+                borderRadius: '10px',
+              width:'100%', margin :'8px'}}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -82,14 +90,14 @@ const DateTimePickerPage = ({onDate, handlenextpage}) => {
                 )}
               />
             </LocalizationProvider>
-          </Grid>
         </Grid>
         <Box sx={{ mt: 2, textAlign: "right" }}>
-          <Button type="submit" onClick={handlenext} variant="contained">
+          <Button type="submit" onClick={handlenext} variant="contained"  sx={{ background: '#056AB5',
+          boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+          borderRadius: '20px',}}>
             Next
           </Button>
         </Box>
-
     </Grid>
   );
 };

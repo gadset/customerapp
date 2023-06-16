@@ -1,4 +1,4 @@
-const functions = require("firebase-functions");
+//const functions = require("firebase-functions");
 const express = require('express'); // Importing express module
   
 const app = express(); // Creating an express object
@@ -35,4 +35,4 @@ app.listen(port, function (err) {
    }
 });
 
-exports.app = functions.https.onRequest(app);
+//exports.app = functions.https.onRequest(app);

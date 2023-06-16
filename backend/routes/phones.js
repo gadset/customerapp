@@ -5,8 +5,9 @@ const glossary = require('../src/glossary');
 const search = require('../src/search');
 const top = require('../src/top');
 
-const Razorpay = require("razorpay");
 
+const Razorpay = require("razorpay");
+const db = require('../firebase_Setup');
 const router = express.Router();
 
 router.get('/', function (req, res) {
@@ -59,8 +60,10 @@ router.get('/', function (req, res) {
    router.post("/orders", async (req, res) => {
     try {
         const instance = new Razorpay({
-            key_id: process.env.RAZORPAY_KEY_ID,
-            key_secret: process.env.RAZORPAY_SECRET,
+           // key_id: process.env.RAZORPAY_KEY_ID,
+           // key_secret: process.env.RAZORPAY_SECRET,
+           key_id : "nc09IOkWivlgjORqBqWLaXJA",
+           key_secret : "rzp_test_hjnHnpkynNqw7v",
         });
 
         const options = {
@@ -114,5 +117,74 @@ router.post("/success", async (req, res) => {
       res.status(500).send(error);
   }
 });
+
+router.post('/sendquote', function (req, res) {
+    //const quotedb = db.collection('Users');
+    async function start() {
+        try {
+            console.log(req.body);
+            const id = req.body.uid;
+            const userJson = {
+              "issue": req.body.issue,
+              "model": req.body.model,
+              "activestate" : true,
+            };
+            const quoteDb = db.collection('Quotes'); 
+            const response = await quoteDb.doc(id).set(userJson);
+            res.send({"response" : "True"});
+    //         var refreshIntervalId =  setInterval(async function() {  
+    //             const userRef = await db.collection("Quotes").doc(id)
+    // .update({
+    //              "activestate" : true,
+    //         });
+    //            }, 60000); 
+    //       clearInterval(refreshIntervalId);
+  
+          } catch(error) {
+           // res.send(error);
+           res.send({"response" : "false"});
+          }
+    }     
+    start();    
+  })
+  router.post('/submitquote', function (req, res) {
+    //const quotedb = db.collection('Users');
+    console.log(req.body);
+    async function start() {
+        try {
+            const id = req.body.uid;
+
+            const userRef = db.collection("Quotes").doc(id);
+    const response = await userRef.get();
+    console.log(response.data());
+        if(response.data().activestate === true){
+            console.log("ifcond");
+            var jsonformat={};
+            jsonformat[req.body.name] = {
+                "amount" : req.body.amount,
+                "email" : req.body.email,
+                "name" : req.body.name,
+            }; 
+          
+           db.collection("Quotes").doc(id).collection("quotes").add({   "amount" : req.body.amount,
+           "email" : req.body.email,
+           "name" : req.body.name})
+        //    db1.doc(id).update({
+        //    // quote : [...jsonformat]
+        //    jsonformat
+        //    }, {merge:true})
+            res.send(response);        
+        }
+        else{
+            console.log("elsecond");
+            res.send({"message" : "this bid is closed"});
+        }
+        
+          } catch(error) {
+            res.send(error);
+          }
+    }
+    start();   
+  })
 
    module.exports = router ;

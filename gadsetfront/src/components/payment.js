@@ -9,17 +9,35 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import address from '../Images/summarypage/address.svg';
+import calendar from '../Images/summarypage/calendar.svg';
+
 
 export default function Payment(){
-    const model1 = useSelector((state) => state.model.value)
-    const issues1 = useSelector((state) => state.issues.value)
+  const model1 = useSelector((state) => state.model.value)
+  const issues1 = useSelector((state) => state.issues.value)
+  const address1  = useSelector((state) => state.address.value)
+  const date1 = useSelector((state)=> state.date.value);
+  const mobile = useSelector((state) => state.mobile.value);
+  const image = useSelector((state)=>state.image.value);
     const history = useHistory();
 
     var total = 0;
     for (let i = 0; i < issues1.length; i++) {
-       total += issues1[i]['cost'];
+       total += Number(issues1[i]['cost']);
       }
     const gst = total/10 ;
+    total = gst + total;
+
+    const [value, setValue] = React.useState('female');
+
+    const handleChange = (event) => {
+      setValue(event.target.value);
+    };
     
     function loadScript(src) {
         return new Promise((resolve) => {
@@ -46,7 +64,7 @@ export default function Payment(){
         }
     
         // creating a new order
-        const result = await  fetch('http://localhost:8000/orders' , {
+        const result = await  fetch('https://us-central1-backendapp-89bd1.cloudfunctions.net/app/orders' , {
           method: 'POST',
           headers: {
             'Accept': 'application/json, text/plain, */*',
@@ -68,9 +86,9 @@ export default function Payment(){
     
         const options = {
             key: "rzp_test_hjnHnpkynNqw7v", // Enter the Key ID generated from the Dashboard
-            amount: amount.toString(),
+            amount: total*100,
             currency: currency,
-            name: "Venkatesh patnala",
+            name: address1['name'],
             description: "Test Transaction",
             image: { logo },
             order_id: order_id,
@@ -82,7 +100,7 @@ export default function Payment(){
                     razorpaySignature: response.razorpay_signature,
                 };
                // axios.post("http://localhost:8000/payment/success", data) 
-                const result = await fetch('http://localhost:8000/payment/success' , {
+                const result = await fetch('https://us-central1-backendapp-89bd1.cloudfunctions.net/app/success' , {
                   data : data,
                   method: 'POST',
                   headers: {
@@ -99,12 +117,11 @@ export default function Payment(){
                alert(result.data.msg);
             },
             prefill: {
-                name: "venkatesh",
-                email: "patnala.1@iitj.ac.in",
-                contact: "8688749458",
+                name:address1['name'],
+                contact: mobile,
             },
             notes: {
-                address: "iit jodhpur",
+                address: address1['city'],
             },
             theme: {
                 color: "#61dafb",
@@ -116,11 +133,44 @@ export default function Payment(){
     }
     
     return(
-        <Grid container sx={{display:'flex', flexDirection:'column', margin:'8px', padding:'8px'}}>
-        <Typography variant="h5">Price Summary</Typography>
-        <Typography>Selected Device : {model1}</Typography>
-        <Grid item>
-            <Typography variant="h6"> Selected Issue </Typography>
+        <Grid container sx={{display:'flex', flexDirection:'column', padding:'8px', width:'100%', justifyContent:'center', alignItems:'center'}}>
+        <Typography style={{color: '#056AB5',fontSize : '24px',fontFamily:'Poppins', fontStyle:'normal',lineHeight : '28px', fontWeight :600, marginTop:'4px'}}>Payment</Typography>
+        <Typography style={{color: '#056AB5',fontSize : '16px',fontFamily:'Open sans', fontStyle:'normal',lineHeight : '22px', fontWeight :400, marginTop:'4px'}}>Selected Device : {model1}</Typography>
+        <Grid item spacing={1} sx={{display:'flex', flexDirection:'column',width:'100%'}}>
+        <Grid item sx={{marginTop : '8px'}}>
+      <Box sx={{display:'flex', flexDirection:'row', alignItems:'center'}}>
+        <img src={address} alt="address icon" style={{marginLeft:'-5px'}} />
+        <div>
+        <Typography style={{color: '#494949',fontSize : '16px',fontFamily:'Open sans', fontStyle:'normal',lineHeight : '22px', fontWeight :400, margin:'4px'}}>Address: {mobile}, {address1['name']}, {address1['flat']} </Typography>
+        <Typography style={{color: '#494949',fontSize : '16px',fontFamily:'Open sans', fontStyle:'normal',lineHeight : '22px', fontWeight :400, margin:'4px'}}>{address1['city']}, {address1['landmark']}, {address1['pin']}</Typography>
+        </div>
+      </Box>
+    </Grid>
+
+    <Grid item sx={{marginTop : '8px'}}>
+      <Box sx={{display:'flex', flexDirection:'row', alignItems:'center'}}>
+        <img src={calendar} alt="address icon" />
+        <div>
+        <Typography style={{color: '#494949',fontSize : '16px',fontFamily:'Open sans', fontStyle:'normal',lineHeight : '22px', fontWeight :400, margin:'4px'}}>Date : {date1['date']} </Typography>
+        </div>
+      </Box>
+    </Grid>
+        <Typography style={{color: '#056AB5',fontSize : '16px',fontFamily:'Open sans', fontStyle:'normal',lineHeight : '22px', fontWeight :600, marginTop:'4px'}}>Select Payment Option</Typography>
+        <FormControl>
+      <RadioGroup
+        value={value}
+        onChange={handleChange}
+      >
+        <FormControlLabel value="online" sx={{background: '#FBFBFB',
+boxShadow:' 0px 4px 4px rgba(0, 0, 0, 0.1), inset 0px 4px 4px rgba(0, 0, 0, 0.1)',
+borderRadius: '20px', width:'70%', marginTop:'4px', alignSelf:'center'}} control={<Radio />} label="Pay online" />
+        <FormControlLabel sx={{background: '#FBFBFB',
+boxShadow:' 0px 4px 4px rgba(0, 0, 0, 0.1), inset 0px 4px 4px rgba(0, 0, 0, 0.1)',
+borderRadius: '20px', width:'70%', marginTop:'4px',  alignSelf:'center'}} value="later" control={<Radio />} label="Pay later" />
+      </RadioGroup>
+    </FormControl>
+
+            {/* <Typography variant="h6"> Selected Issue </Typography>
             <TableContainer component={Paper}>
   <Table sx={{ minWidth: 400 }} aria-label="simple table">
   <TableBody>
@@ -152,8 +202,10 @@ export default function Payment(){
           </TableRow>
     </TableBody>
   </Table>
-</TableContainer>
-<Button variant="contained" onClick={displayRazorpay}>Pay Now</Button>
+</TableContainer> */}
+<Button variant="contained" onClick={displayRazorpay} sx={{width:'100px',  alignSelf:'center', margin:'4px', background: '#056AB5',
+          boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+          borderRadius: '20px',}}>Pay Now</Button>
 </Grid>
 </Grid>
     )

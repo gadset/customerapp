@@ -1,24 +1,27 @@
 import logo from './logo.svg';
 import './App.css';
+import { PostAdd } from '@mui/icons-material';
+import Postbid from './components/postbidding';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import LoginForm from './components/signinpage';
 
 function App() {
   return (
+    <Router>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <Route path='/addbid'>
+<Postbid/>
+    </Route>
+    <Route path='/home'>
+      <LoginForm/>
+    </Route>
     </div>
+    </Router>
   );
 }
 

@@ -6,6 +6,7 @@ import {
   Typography,
   Box,
   Divider,
+  FormControl, FormControlLabel, Checkbox, FormGroup
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setAddressValue } from "../reduxstore";
@@ -48,15 +49,16 @@ const AddressForm = ({onData, handlenextpage}) => {
   return (
     <Grid container sx={{ marginLeft: 0, marginTop : '10px', width: "100%", display:'flex', flexDirection:'column', alignItems:'center' ,    marginBottom: '16px',
  }}>
-      <Typography variant="h6" sx={{ mb: 2 }}>
+      <Typography style={{color: '#056AB5',fontSize : '16px',fontFamily:'Poppins', fontStyle:'normal', margin:'8px',lineHeight : '24px', fontWeight :600}}>
        Add your Address
       </Typography>
-      {/* <Button>Use my current location</Button>
-      <Divider/> */}
-        <Grid spacing={2} sx={{ width: "80%",  display:'flex', flexDirection:'column', alignItems:'center',     padding: '8px',
-    backgroundColor : '#c8dee6',
-    borderRadius : '10px'  }}>
-          <Grid item md={6} xs={12}>
+      <Button sx={{background:' #F0F0F0',
+border:' 1px solid #EDECEC',
+borderRadius: '20px', color:'black', width:'90%'}} variant="contained"> Use my current location</Button>
+      <Divider sx={{margin:'4px', color:'black'}} />
+        <Grid container spacing={2} sx={{ width: "90%",  display:'flex', flexDirection:'column',      padding: '8px',marginTop:'10px',
+    borderRadius : '10px' ,
+    textAlign:'left' }}>
             <Typography sx={{ mb: 1 }}>Name</Typography>
             <TextField
               variant="outlined"
@@ -67,9 +69,12 @@ const AddressForm = ({onData, handlenextpage}) => {
               size='small'
               fullWidth
               onChange={(e) => setName(e.target.value)}
+              sx={{background: '#EDECEC',
+                border: '1px solid rgba(170, 168, 168, 0.6)',
+                boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
+                borderRadius: '10px',}}
             />
-          </Grid>
-          <Grid item md={6} xs={12}>
+        
             <Typography sx={{ mb: 1 }}>Mobile Number</Typography>
             <TextField
               variant="outlined"
@@ -80,9 +85,12 @@ const AddressForm = ({onData, handlenextpage}) => {
               name="mobileNumber"
               value={mobileNumber}
               onChange={(e) => setMobileNumber(e.target.value)}
+              sx={{background: '#EDECEC',
+                border: '1px solid rgba(170, 168, 168, 0.6)',
+                boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
+                borderRadius: '10px',}}
             />
-          </Grid>
-          <Grid item md={6} xs={12}>
+
             <Typography sx={{ mb: 1 }}>Pin Code</Typography>
             <TextField
               variant="outlined"
@@ -93,9 +101,12 @@ const AddressForm = ({onData, handlenextpage}) => {
               name="pinCode"
               value={pinCode}
               onChange={(e) => setPinCode(e.target.value)}
+              sx={{background: '#EDECEC',
+                border: '1px solid rgba(170, 168, 168, 0.6)',
+                boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
+                borderRadius: '10px',}}
             />
-          </Grid>
-          <Grid item md={6} xs={12}>
+
             <Typography sx={{ mb: 1 }}>
               Flat, House no., Building, Company, Apartment
             </Typography>
@@ -108,9 +119,12 @@ const AddressForm = ({onData, handlenextpage}) => {
               name="flatNumber"
               value={flatNumber}
               onChange={(e) => setFlatNumber(e.target.value)}
+              sx={{background: '#EDECEC',
+                border: '1px solid rgba(170, 168, 168, 0.6)',
+                boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
+                borderRadius: '10px',}}
             />
-          </Grid>
-          <Grid item md={6} xs={12}>
+
             <Typography sx={{ mb: 1 }}>Landmark (Optional)</Typography>
             <TextField
               variant="outlined"
@@ -120,9 +134,12 @@ const AddressForm = ({onData, handlenextpage}) => {
               name="landmark"
               value={landmark}
               onChange={(e) => setLandmark(e.target.value)}
+              sx={{background: '#EDECEC',
+                border: '1px solid rgba(170, 168, 168, 0.6)',
+                boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
+                borderRadius: '10px',}}
             />
-          </Grid>
-          <Grid item md={6} xs={12}>
+
             <Typography sx={{ mb: 1 }}>City</Typography>
             <TextField
               variant="outlined"
@@ -133,11 +150,20 @@ const AddressForm = ({onData, handlenextpage}) => {
               name="city"
               value={city}
               onChange={(e) => setCity(e.target.value)}
+              sx={{background: '#EDECEC',
+                border: '1px solid rgba(170, 168, 168, 0.6)',
+                boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
+                borderRadius: '10px',}}
             />
-          </Grid>
+            <FormGroup>
+  <FormControlLabel control={<Checkbox />} label="Use this as default address" />
+</FormGroup>
         </Grid>
+        
         <Box sx={{ mt: 2, textAlign: "right" }}>
-          <Button type="submit" onClick={handlenext} variant="contained">
+          <Button type="submit" onClick={handlenext} variant="contained"  sx={{ background: '#056AB5',
+          boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+          borderRadius: '20px',}}>
             Add address
           </Button>
         </Box>
