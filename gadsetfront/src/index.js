@@ -15,14 +15,14 @@ const firebaseConfig = {
   // ...
   // The value of `databaseURL` depends on the location of the database
  // databaseURL: "https://gadset-customer-default-rtdb.asia-southeast1.firebasedatabase.app/",
-  apiKey: "AIzaSyBULQBdwnrNopZghLLXL1dHrPZvRDXMe68",
-  authDomain: "gadset-customer.firebaseapp.com",
-  databaseURL: "https://gadset-customer-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "gadset-customer",
-  storageBucket: "gadset-customer.appspot.com",
-  messagingSenderId: "853423138437",
-  appId: "1:853423138437:web:eb298cd5e3159a6e1aabec",
-  measurementId: "G-J8Z28LEYJ5"
+ apiKey: "AIzaSyBULQBdwnrNopZghLLXL1dHrPZvRDXMe68",
+ authDomain: "gadset-customer.firebaseapp.com",
+ databaseURL: "https://gadset-customer-default-rtdb.asia-southeast1.firebasedatabase.app",
+ projectId: "gadset-customer",
+ storageBucket: "gadset-customer.appspot.com",
+ messagingSenderId: "853423138437",
+ appId: "1:853423138437:web:1a3b38fccfc2aac51aabec",
+ measurementId: "G-Q2DEF24XCF"
 };
 
 // Initialize Firebase

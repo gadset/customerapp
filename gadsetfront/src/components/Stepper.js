@@ -61,6 +61,7 @@ export default function StepperForm() {
   const model1 = useSelector((state) => state.model.value)
   const issues1 = useSelector((state) => state.issues.value)
   const total = location.state.total;
+  const delivery = location.state.delivery;
   console.log(total);
   const mobile = useSelector((state)=> state.mobile.value);
   const [address, setAddress] = useState({});
@@ -99,7 +100,18 @@ export default function StepperForm() {
     },
     {
       label: 'Price Summary',
-      component: <PriceSummary model={model1} issue={issues1} addres={address} datetime={Datetime} mobile={mobile} />,
+      component: <PriceSummary model={model1} issue={issues1} addres={address} datetime={Datetime} mobile={mobile} delivery={delivery} />,
+    },
+    {
+      label : 'Payment',
+      component :<Payment/>
+    }
+  ];
+
+  const steps1 = [
+    {
+      label: 'Price Summary',
+      component: <PriceSummary model={model1} issue={issues1} mobile={mobile} delivery={delivery}/>,
     },
     {
       label : 'Payment',
@@ -115,7 +127,7 @@ export default function StepperForm() {
       case 1:
         return <DateTimePickerPage onDate={handleDatetime} handlenextpage={handleNext}/>;
       case 2:
-        return <PriceSummary handlenextpage={handleNext} />;
+        return <PriceSummary handlenextpage={handleNext} delivery={delivery} />;
       case 3:
         return <Payment />;
       default:
@@ -123,7 +135,18 @@ export default function StepperForm() {
     }
   }
 
-  return (
+  function getStepContent1(stepIndex) {
+    switch (stepIndex) {
+      case 0:
+        return <PriceSummary handlenextpage={handleNext} delivery={delivery} />;
+      case 1:
+        return <Payment />;
+      default:
+        return "Unknown stepIndex";
+    }
+  }
+
+  return delivery=== "Doorstep delivery" ? (
     <Grid sx={{ marginLeft: 0, marginTop : '10px', marginBottom:'30px' }} className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel connector={<StepConnector />}>
         {steps.map((step,index) => (
@@ -169,5 +192,53 @@ export default function StepperForm() {
         )}
       </div>
     </Grid>
-  );
+  )
+   :
+   (
+    <Grid sx={{ marginLeft: 0, marginTop : '10px', marginBottom:'30px' }} className={classes.root}>
+      <Stepper activeStep={activeStep} alternativeLabel connector={<StepConnector />}>
+        {steps1.map((step,index) => (
+          <Step key={step.label}>
+            <StepLabel style={{fontSize : '10px',fontFamily:'Open sans', fontStyle:'normal', margin:'8px',lineHeight : '14px', fontWeight :400}}>{step.label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+      <div>
+        
+        {activeStep === steps.length ? (
+          <div>
+            <Typography className={classes.instructions}>
+              All steps completed - you&apos;re finished
+            </Typography>
+            <Button onClick={handleReset} className={classes.button}>
+              Reset
+            </Button>
+          </div>
+        ) : (
+          <div>
+               <Typography className={classes.instructions}>
+              {getStepContent1(activeStep)}
+            </Typography>
+            <div>
+              <Button
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                className={classes.button}
+              >
+                Back
+              </Button>
+              {/* <Button
+                variant="contained"
+                color="primary"
+                onClick={handleNext}
+                className={classes.button}
+              >
+                Next
+              </Button> */}
+            </div>
+          </div>
+        )}
+      </div>
+    </Grid>
+   );
 }

@@ -9,6 +9,7 @@ const top = require('../src/top');
 const Razorpay = require("razorpay");
 const db = require('../firebase_Setup');
 const router = express.Router();
+const Twilio = require("./Messageservice.js");
 
 router.get('/', function (req, res) {
     var devices;
@@ -132,17 +133,29 @@ router.post('/sendquote', function (req, res) {
             const quoteDb = db.collection('Quotes'); 
             const response = await quoteDb.doc(id).set(userJson);
             res.send({"response" : "True"});
-    //         var refreshIntervalId =  setInterval(async function() {  
-    //             const userRef = await db.collection("Quotes").doc(id)
-    // .update({
-    //              "activestate" : true,
-    //         });
-    //            }, 60000); 
-    //       clearInterval(refreshIntervalId);
+            const partref = await db.collection('Partners').get();            
+            partref.docs.map(doc => {
+                Twilio.sendSms({ to: doc.id, 
+                    message: `you got a notification from gadset, click on this linke to see the quotes https://gadsetpartner.web.app/home` }, 
+                    (err,smsData) => {
+                     console.log(smsData);
+                });
+            })
+        
+           var refreshIntervalId =  setInterval(async function() {      
+                const userRef = await db.collection("Quotes").doc(id)
+    .update({
+                 "activestate" : false,
+            });
+               }, 60000); 
+
+            
+          clearInterval(refreshIntervalId);
   
           } catch(error) {
            // res.send(error);
-           res.send({"response" : "false"});
+           console.log(error)
+           res.send({"message" : "false"});
           }
     }     
     start();    
@@ -153,27 +166,38 @@ router.post('/sendquote', function (req, res) {
     async function start() {
         try {
             const id = req.body.uid;
-
+            console.log(id);
             const userRef = db.collection("Quotes").doc(id);
     const response = await userRef.get();
     console.log(response.data());
         if(response.data().activestate === true){
             console.log("ifcond");
-            var jsonformat={};
-            jsonformat[req.body.name] = {
+            if(req.body.delivery == 'Service center') {
+                console.log(req.body);
+
+                const response = db.collection("Quotes").doc(id).collection("quotes").add({   
                 "amount" : req.body.amount,
                 "email" : req.body.email,
                 "name" : req.body.name,
-            }; 
-          
-           db.collection("Quotes").doc(id).collection("quotes").add({   "amount" : req.body.amount,
-           "email" : req.body.email,
-           "name" : req.body.name})
+                "delivery" : req.body.delivery,
+                "warranty" : req.body.warranty,
+                "address": req.body.address})
+                console.log(response);
+                console.log("yes done");
+            } 
+          else{
+            userRef.collection("quotes").add({   "amount" : req.body.amount,
+            "email" : req.body.email,
+            "name" : req.body.name,
+            "delivery" : req.body.delivery,
+            "warranty" : req.body.warranty,});
+            console.log("yes done");
+          }
         //    db1.doc(id).update({
         //    // quote : [...jsonformat]
         //    jsonformat
         //    }, {merge:true})
-            res.send(response);        
+            res.send({"message" : "Succefully submitted"});        
         }
         else{
             console.log("elsecond");

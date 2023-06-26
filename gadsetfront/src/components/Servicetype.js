@@ -11,12 +11,18 @@ import { useState } from 'react';
 import PhoneSignUp from '../Login/PhoneSignup';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+
 
 const useStyles = makeStyles((theme) => ({
     card: {
       display : 'flex',
       flexDirection :'row',
       alignItems : 'center',
+      width : '300px',
+      margin : '8px'
       
     },
     root: {
@@ -69,11 +75,11 @@ const useStyles = makeStyles((theme) => ({
    const handlenextpage = () => {
     history.push({
       pathname:'/stepper',
-      state : {total:total}
+      state : {total:total, delivery:value}
     }) ;
    }
 
-   const [value, setValue] = useState('');
+   const [value, setValue] = useState('Service center');
 
    const handleChange = (event) => {
      setValue(event.target.value);
@@ -81,26 +87,26 @@ const useStyles = makeStyles((theme) => ({
 
     return(
         <Grid container className={classes.root}>
-          <Typography style={{ color: '#056AB5', padding:'8px', margin:'8px'}}> Select Service Type </Typography>
-          {/* <Grid container spacing={2} className={classes.sub}>  
+          {/* <Typography style={{ color: '#056AB5', padding:'8px', margin:'8px'}}> Select Service Type </Typography>
+          <Grid container spacing={2} className={classes.sub}>  
           <Modal 
            className={classes.modal}
            open={modalOpen}
            onClose={handleCloseModal}>
             <PhoneSignUp/>
           </Modal>
-     */}
+     
           <Grid container spacing={2} className={classes.sub}>
   
             <Grid item md={7} xs={12}>
-              {/* <Link to={{pathname:'/stepper', mod : mod, issue : iss}}> */}
+              {/* <Link to={{pathname:'/stepper', mod : mod, issue : iss}}> 
                 <Card className={classes.card} sx={{background:' #FBFBFB',
 boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1), inset 0px 4px 4px rgba(0, 0, 0, 0.1)',
 borderRadius: '20px'}} 
-onClick={handlenextpage}>
+>
                 <Radio
         onChange={handleChange}
-        value="Doorstep"
+        value="Doorstep delivery"
         name="radio-buttons"
       />
        <CardContent>
@@ -114,16 +120,16 @@ onClick={handlenextpage}>
                   />
                
                 </Card>
-                {/* </Link> */}
+      
             </Grid>
             <Grid item md={7} xs={12}>
                 <Card className={classes.card} sx={{background:' #FBFBFB',
 boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1), inset 0px 4px 4px rgba(0, 0, 0, 0.1)',
 borderRadius: '20px'}}
- onClick={handlenextpage} >
+>
                 <Radio
         onChange={handleChange}
-        value="store locator"
+        value="Service center"
         name="radio-buttons"
       />
       <CardContent>
@@ -138,10 +144,58 @@ borderRadius: '20px'}}
                 
                 </Card>
             </Grid>
+            <Button onClick={handlenextpage}>Next</Button>
             </Grid>
 
-            {/* </Grid> */}
-         
+        
+          */}
+
+<FormControl>
+      <FormLabel id="demo-controlled-radio-buttons-group">Select Service Type</FormLabel>
+      <RadioGroup
+        aria-labelledby="demo-controlled-radio-buttons-group"
+        name="controlled-radio-buttons-group"
+        value={value}
+        onChange={handleChange}
+      >
+        <FormControlLabel value="Service center" control={  
+                <Radio
+      />
+
+    } label={<Card className={classes.card} sx={{background:' #FBFBFB',
+    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1), inset 0px 4px 4px rgba(0, 0, 0, 0.1)',
+    borderRadius: '20px'}}
+    >
+          <CardContent>
+                    Store Locator
+                    </CardContent>
+                    <CardMedia
+                        component="img"
+                        sx={{ width: '86px' }}
+                        image={house}
+                        alt='doorstep'
+                      />
+                    
+                    </Card>}/>
+        <FormControlLabel value="Doorstep delivery" control={
+                <Radio
+      />} label={<Card className={classes.card} sx={{background:' #FBFBFB',
+      boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1), inset 0px 4px 4px rgba(0, 0, 0, 0.1)',
+      borderRadius: '20px'}} 
+      >             <CardContent>
+                      Door Step Service
+                      </CardContent>
+                      <CardMedia
+                          component="img"
+                          sx={{width: '86px' }}
+                          image={bike}
+                          alt='doorstep'
+                        />
+                     
+                      </Card>}/>
+      </RadioGroup>
+    </FormControl>
+    <Button onClick={handlenextpage}>Next</Button>
 
         </Grid>
 

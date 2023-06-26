@@ -2,11 +2,23 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from 'react';
 import { TextField, Button, Grid, Typography } from '@mui/material';
 import { auth, firestoredb } from "../index";
-import { doc, setDoc, getFirestore,addDoc, collection } from "firebase/firestore"; 
+import { doc, setDoc, getFirestore,addDoc, collection, getDoc } from "firebase/firestore"; 
 import { Link , useHistory, useLocation} from 'react-router-dom';
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { messaging } from "../index";
 import {Row, Col, Toast} from 'react-bootstrap';
+import Demo from "./getlocation";
+import { useDispatch } from "react-redux";
+import { setAddressValue, setemailValue, setnameValue } from "../reduxslice";
+import { Form, Alert } from "react-bootstrap";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
+import {
+    signInWithPhoneNumber,
+    RecaptchaVerifier,
+  } from "firebase/auth";
+import Phonenumber from "../Login/Phonenumber.js";
+import { setMobileValue } from "../reduxslice";
 
 export const gettoken = (setTokenFound) => {
   return getToken(messaging, {vapidKey: 'BGv0240OnB9TXCS1EnZSRkTDc31iMchcnB4StYyTjKV0VNnmQnauwLkK-n3xV3aY9g5lNff5-b31ymOsesZAMW8'}).then((currentToken) => {
@@ -32,13 +44,47 @@ export const onMessageListener = () =>
       resolve(payload);
     });
 });
+
+function setUpRecaptha(number) {
+  // var appVerifier = new RecaptchaVerifier('recaptcha-container');
+     const recaptchaVerifier = new RecaptchaVerifier(
+       "recaptcha-container",
+       {},
+       auth
+     );
+     recaptchaVerifier.render();
+     console.log('function called')
+     return signInWithPhoneNumber(auth, number, recaptchaVerifier);
+ 
+   // let out ;
+   //   const recaptchaVerifier = new RecaptchaVerifier('sendotp', {
+   //     'size': 'invisible',
+   //     'callback': (response) => {
+   //       // reCAPTCHA solved, allow signInWithPhoneNumber.
+   //       out = signInWithPhoneNumber(auth, number, recaptchaVerifier);
+   //     }
+   //   }, auth);
+   //   // recaptchaVerifier.render();
+   //    return out;
+    ;
+   }
+
 function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [show, setShow] = useState(false);
+  const [address, setaddress] = useState(null);
   const [notification, setNotification] = useState({title: '', body: ''});
   const [isTokenFound, setTokenFound] = useState(false);
+  const [error, setError] = useState("");
+  const [number, setNumber] = useState("");
+  const [flag, setFlag] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [result, setResult] = useState("");
+  const [verified, setverified] = useState(false);
+  const [loggedin, setloggedin] = useState(false);
+  const dispatch = useDispatch();
 gettoken(setTokenFound);
 
 onMessageListener().then(payload => {
@@ -62,23 +108,50 @@ onMessageListener().then(payload => {
     setName(e.target.value);
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
+    dispatch(setAddressValue(address));
+    dispatch(setnameValue(name));
+    dispatch(setemailValue(email));
     e.preventDefault();
-    createUserWithEmailAndPassword(auth, email, password)
-    .then(async(userCredential) => {
-        const user = userCredential.user;
-     const docRef = await addDoc(collection(firestoredb, "Partners"), {
-           "email" : email,
-           "name" : name
-           });
-    console.log(docRef.id);
+    const docRef = doc(firestoredb, "Partners", number);
+    const data = {
+               "email" : email,
+               "name" : name,
+               "address" : address,
+               }
+   
+   setDoc(docRef, data)
+   .then(() => {
+       console.log("Document has been added successfully");
+   })
+   .catch(error => {
+       console.log(error);
+   })
+    // const docRef = await setDoc(collection(firestoredb, "Partners",number), {
+    //          "email" : email,
+    //          "name" : name,
+    //          "address" : address,
+    //          });
+    // console.log('signin successful')
     history.push({
-        pathname : '/addbid',
-        state : {name : name, email : email}
-    })
-      // ...
-      console.log('signin successful')
-    })
+       pathname : '/addbid',
+        })
+    // createUserWithEmailAndPassword(auth, email, password)
+    // .then(async(userCredential) => {
+    //     const user = userCredential.user;
+    //  const docRef = await addDoc(collection(firestoredb, "Partners"), {
+    //        "email" : email,
+    //        "name" : name,
+    //        "address" : address,
+    //        });
+    // console.log(docRef.id);
+    // history.push({
+    //     pathname : '/addbid',
+    //     state : {name : name, email : email}
+    // })
+    //   // ...
+    //   console.log('signin successful')
+    // })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -89,10 +162,83 @@ onMessageListener().then(payload => {
     console.log('Password:', password);
   };
 
+  const getOtp = async (e) => {
+    e.preventDefault();
+    console.log(number);
+    setError("");
+    if (number === "" || number === undefined)
+      return setError("Please enter a valid phone number!");
+    try {
+      dispatch(setMobileValue(number));
+      const response = await setUpRecaptha(number);
+      setResult(response);
+      console.log(response);
+      setFlag(true);
+    } catch (err) {
+      setError(err.message);
+    }
+
+    console.log(error);
+  };
+
+
+  const verifyOtp = async (e) => {
+    e.preventDefault();
+    setError("");
+    if (otp === "" || otp === null) return;
+    try {
+      await result.confirm(otp);
+      setverified(true);
+      alert("number verified");
+//       const docRef = doc(firestoredb, "Partners", number );
+//       const data = {
+//         "email" : "email",
+//         "name" : "venk",
+//         "address" : "shusus",
+//         };
+//       setDoc(docRef, data);
+// console.log('signin successful')
+      console.log(number);
+      const docRef = doc(firestoredb, "Partners", number);
+      console.log(docRef);
+      const docSnap = await getDoc(docRef);   
+      if(docSnap.exists()){
+        console.log(docSnap.data()['address']);
+        dispatch(setAddressValue(docSnap.data()['address']));
+        dispatch(setnameValue(docSnap.data()['name']));
+        dispatch(setemailValue(docSnap.data()['email']));
+        console.log('signin successful');
+        history.push({
+           pathname : '/addbid',
+        })
+      }
+      else{
+        setloggedin(true);
+      }
+      // const auth= getAuth();
+      // const user = auth.currentUser;
+      // var uid;
+      // if(user){
+      //   uid = user.uid;
+      // }
+      // const docRef = await addDoc(collection(firestoredb, "Users"), {
+      //  "number" : number,    
+      // "uid" : uid,
+      // });   
+      // history.push({
+      //   pathname : '/service',
+      //   state : {total : total}
+      // })
+
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   return (
-    <Grid>
+    <Grid container sx={{margin:'4px', padding:'4px', display:'flex', flexDirection:'column'}}>
         <Typography>Sign in first to see the customer requirements</Typography>
-        <Toast onClose={() => setShow(false)} show={show} delay={3000} autohide animation style={{
+        {/* <Toast onClose={() => setShow(false)} show={show} delay={3000} autohide animation style={{
           position: 'absolute',
           top: 20,
           right: 20,
@@ -108,31 +254,85 @@ onMessageListener().then(payload => {
             <small>just now</small>
           </Toast.Header>
           <Toast.Body>{notification.body}</Toast.Body>
-        </Toast>
-        <Button onClick={() => setShow(true)}>Show Toast</Button>
-    <form onSubmit={handleSubmit}>
-      <TextField
-        label="Email"
-        variant="outlined"
-        value={email}
-        onChange={handleEmailChange}
-      />
-      <TextField
-        label="Password"
-        type="password"
-        variant="outlined"
-        value={password}
-        onChange={handlePasswordChange}
-      />
+        </Toast> 
+        <Button onClick={() => setShow(true)}>Show Toast</Button>*/}
+    {error && <Alert variant="danger">{error}</Alert>}
+    
+        <Form onSubmit={getOtp} style={{ display: !flag ? "block" : "none", margin:'auto' }}>
+          <Form.Group style={{margin:'8px'}} controlId="formBasicEmail">
+            <PhoneInput
+            defaultCountry="IN"
+              value={number}
+              onChange={setNumber}
+              inputComponent={Phonenumber}
+              placeholder="Enter phone number"
+            />
+            <div style={{margin:'8px'}} id="recaptcha-container"></div>
+          </Form.Group>
+          <div className="button-right">
+            <Link to="/">
+              <Button color="secondary">Cancel</Button>
+            </Link>
+            &nbsp;
+            <Button type="submit" variant="contained" color="primary" id="sendotp"  sx={{ background: '#056AB5',
+          boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+          borderRadius: '20px',}}>
+              Send code
+            </Button>
+          </div>
+        </Form>
+
+        <Form onSubmit={verifyOtp} style={{ display: flag ? "block" : "none" }}>
+          <Form.Group style={{margin:'8px'}} controlId="formBasicOtp">
+            <TextField
+              type="otp"
+              placeholder="Enter OTP"
+              onChange={(e) => setOtp(e.target.value)}
+              size='small'
+            />
+          </Form.Group>
+          <div className="button-right">
+            <Link to="/">
+              <Button color="secondary">Cancel</Button>
+            </Link>
+            &nbsp;
+            <Button type="submit" variant="contained" color="primary"  sx={{ background: '#056AB5',
+          boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+          borderRadius: '20px',}}>
+              Verify
+            </Button>
+          </div>
+        </Form>
+        {
+          loggedin ? 
+          <Grid item> <TextField
+          label="Email"
+          variant="outlined"
+          value={email}
+          onChange={handleEmailChange}
+        /> {/*
         <TextField
-        label="Name"
-        type="name"
-        variant="outlined"
-        value={name}
-        onChange={handleChangeName}
-      />
-      <Button type="submit" variant="contained">Submit</Button>
-    </form>
+          label="Password"
+          type="password"
+          variant="outlined"
+          value={password}
+          onChange={handlePasswordChange}
+        /> */}
+          <TextField
+          label="Name"
+          type="name"
+          variant="outlined"
+          value={name}
+          onChange={handleChangeName}
+        />
+        <Typography> Set your service center address </Typography>
+        <Demo setaddress={setaddress}/>
+        <Button type="submit" variant="contained" onClick={handleSubmit}>Submit</Button>
+        </Grid>
+        :
+        <></>
+        }
+      
     </Grid>
   );
 }

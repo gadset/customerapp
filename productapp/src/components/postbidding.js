@@ -1,4 +1,4 @@
-import { Grid, Typography, Card, TextField, Button, Modal } from '@mui/material'
+import { Grid, Typography, Card, TextField, Button, Modal, FilledInput } from '@mui/material'
 import React, { Component, useEffect, useState } from 'react'
 import { getDatabase, ref, child, get } from "firebase/database";
 import { collection, doc, setDoc ,getDocs} from "firebase/firestore"; 
@@ -10,6 +10,12 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import Demo from './getlocation';
+import { useSelector } from 'react-redux';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
       position:'absolute',
       bottom:0,
       flexDirection : 'column',
+      display:'flex'
 
     },
   }));
@@ -37,8 +44,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Postbid(){
   const classes = useStyles();
   const location = useLocation();
-    const name = location.state.name;
-    const email = location.state.email
+   // const name = location.state.name;
+   // const email = location.state.email;
     const [quotedata, setquotedata] = useState([]);
     const[quotesall, setquotesall] = useState([]);
     const [amount, setamount] = useState("");
@@ -46,12 +53,19 @@ export default function Postbid(){
     const [value, setValue] = useState('Service center');
     const [value2, setValue2] = useState('zero warranty');
     const [modelname, setmodelname] = useState('');
+    const [mapsmodel, setmapsmodel] = useState(false);
+    //const [address, setaddress] = useState(null);
+    const [quoteid1, setquoteid1] = useState(null);
+    const history = useHistory();
     const quote1 = []
     const quote2 =[]
+
+    const name = useSelector((state) => state.name.value);
+    const address = useSelector((state) => state.address.value);
+    const email = useSelector((state)=>state.email.value);
     const handledata = async() => {
-      const querySnapshot = await getDocs(collection(firestoredb, "Quotes"));
+    const querySnapshot = await getDocs(collection(firestoredb, "Quotes"));
       querySnapshot.forEach((doc) => {
-        console.log(doc.id, " => ", doc.data());
         doc.data()['quoteid'] = doc.id;
         quote1.push(doc.data());
 quote2.push(doc.id);
@@ -61,6 +75,7 @@ quote2.push(doc.id);
     setquotesall(quote1);
     setquotedata(quote2);
     }
+
     useEffect(() => {
         console.log('hello')
         handledata();
@@ -81,22 +96,79 @@ quote2.push(doc.id);
         setOpen(false);
       }
 
+      const handleClose2 = () =>{
+        setmapsmodel(false);
+      }
+
       const handleChange = (e) => {
         setValue(e.target.value);
-        console.log(e.target.va)
+        console.log(e.target.value)
       }
 
-      const handleopenmodel = (dat) => {
+      const handlechange2 = (e) => {
+        setValue2(e.target.value);
+        console.log(e.target.value)
+      }
+      const handleopenmodel = (dat, id1) => {
         setmodelname(dat);
+        setquoteid1(id1);
         setOpen(true);
-
+       
       }
 
-      const handleadddata = async(id) => {
-        console.log(id);
-        var id1 = quotedata[id];
+      const handlesubmitquote = async() => {
+        setOpen(false);
+        if(value ==='Service center'){
+          setmapsmodel(true);
+          console.log("hello")
+        }
+        else{
+          const id1 = quoteid1;
+          console.log(id1);
+          const response = await fetch('https://us-central1-backendapp-89bd1.cloudfunctions.net/app/submitquote', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json, text/plain, */*',
+              'Content-Type': 'application/json'
+            }, 
+            body : JSON.stringify({
+              "uid" : id1,
+              "name" : name,
+                "email" : email,
+                "amount" : amount,
+                "delivery" : value,
+                "warranty" : value2,    
+            }),   
+          });
+          const json = await response.json();
+          console.log(json);
+          toast.success(json['message']);
+          history.push({
+            pathname : '/addbid'
+          })
+        }
+      }
+
+      const handlesendmessage = async() => {
+        const response = await fetch('http://localhost:8000/message/', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+          }, 
+          body : JSON.stringify({
+           "phone" : "+918688749458",
+          }),   
+        });
+        const json = await response.json();
+        console.log(json);
+      }
+
+      const handleadddata = async() => {
+        const id1 = quoteid1;
         console.log(id1);
-        const response = await fetch('http://localhost:8000/submitquote', {
+        //console.log("helllooooji")
+        const response = await fetch('https://us-central1-backendapp-89bd1.cloudfunctions.net/app/submitquote', {
           method: 'POST',
           headers: {
             'Accept': 'application/json, text/plain, */*',
@@ -106,23 +178,29 @@ quote2.push(doc.id);
             "uid" : id1,
             "name" : name,
               "email" : email,
-              "amount" : amount
-          
+              "amount" : amount,
+              "delivery" : value,
+              "warranty" : value2,
+              "address" : address      
           }),   
         });
         const json = await response.json();
         console.log(json);
-        console.log("happening") 
+        toast.success(json['message']);
+        setOpen(false);
       }
         return(
         <Grid>
+          <Button onClick={handlesendmessage}>Send message</Button>
           <Modal
   open={open}
   onClose={handleClose}
   className={classes.modal}
 > 
-<Grid container className={classes.paper}>
+<Grid container spacing={2} className={classes.paper} sx={{display:'flex', flexDirection:'column'}}>
+  <Grid item>
   <Typography>{modelname}</Typography>
+  </Grid>
   <Grid item>
   <Typography>Select type of service</Typography>
   <FormControl>
@@ -143,6 +221,7 @@ quote2.push(doc.id);
       <RadioGroup
         defaultValue="zero warranty"
         value={value2}
+        onChange={handlechange2}
       >
         <FormControlLabel value="zero warranty" control={<Radio />} label="zero warranty" />
         <FormControlLabel value="3 months" control={<Radio />} label="3 months" />
@@ -151,10 +230,33 @@ quote2.push(doc.id);
       </RadioGroup>
     </FormControl>
     </Grid>
-  <Button>Submit quote</Button>
+
+    <Grid item>
+      
+    <FormControl fullWidth sx={{ m: 1 }} variant="filled">
+          <InputLabel htmlFor="filled-adornment-amount">Amount</InputLabel>
+          <FilledInput
+            id="filled-adornment-amount"
+            startAdornment={<InputAdornment position="start">₹</InputAdornment>}
+            value={amount}
+            onChange={(e)=> setamount(e.target.value)}
+          />
+        </FormControl>
+    </Grid>
+  <Button onClick={handleadddata}>Submit quote</Button>
 </Grid>
 
 </Modal>
+
+{/* <Modal  open={mapsmodel}   onClose={handleClose}
+  className={classes.modal}>
+  <Grid container className={classes.paper}>
+    <Grid item>
+<Demo setaddress={setaddress}/>
+<Button onClick={handleadddata}> Submit quote </Button>
+</Grid>
+  </Grid>
+</Modal> */}
             {
                 quotesall.length > 0 ?
                 quotesall.map((quote, index)=> (
@@ -164,7 +266,7 @@ quote2.push(doc.id);
                         {/* <Typography>{quotedata[quote]['mod']}</Typography> */}
                         {/* <TextField label="Enter the amount here" variant='outlined' value={amount
                         } onChange={(e)=>setamount(e.target.value)}/> */}
-                        <Button onClick={()=> handleopenmodel(quote['model'])}>Submit </Button>
+                        <Button onClick={()=> handleopenmodel(quote['model'], quotedata[index])}> Add quote </Button>
                 </Card>
 
                 ))

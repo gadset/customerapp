@@ -19,7 +19,7 @@ const TableCell = withStyles({
   }
 })(MuiTableCell);
 
-export default function PriceSummary({handlenextpage}){
+export default function PriceSummary({handlenextpage, delivery}){
   const model1 = useSelector((state) => state.model.value)
   const issues1 = useSelector((state) => state.issues.value)
   const address1  = useSelector((state) => state.address.value)
@@ -56,11 +56,12 @@ export default function PriceSummary({handlenextpage}){
     for (let i = 0; i < issues1.length; i++) {
        total += Number(issues1[i]['cost']);
       }
-    const gst = total/10 ;
+    const gst = Math.ceil(total/10) ;
     total = gst + total;
     return(
         <Grid container spacing={2} sx={{width:'100%', display:'flex', flexDirection:'column',alignItems:'center', justifyContent:'center', padding:'8px', marginLeft: 0, marginTop : '10px',}}>
             <Typography style={{color: '#056AB5',fontSize : '24px',fontFamily:'Poppins', fontStyle:'normal',lineHeight : '28px', fontWeight :600, marginTop:'4px'}}>Price Summary </Typography>
+            <Typography>Delivary type: {delivery}</Typography>
             <Grid item>
         <Card sx={{display:'flex', flexdirection:'row', justifyContent:'center', alignItems:'center' }}>
       <CardMedia

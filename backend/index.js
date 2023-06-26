@@ -3,7 +3,7 @@ const express = require('express'); // Importing express module
   
 const app = express(); // Creating an express object
   
-const port = 8000; 
+const port = 8003; 
 const cors=require("cors");
 const corsOptions ={
    origin:'*', 
@@ -21,9 +21,9 @@ const top = require('./src/top');
 
 app.use(express.json({ extended: false }));
 
-
-app.use("/", require("./routes/phones"));
-app.use("/", require("./routes/payment"));
+app.use("/", require("./routes/phones.js"));
+app.use("/", require("./routes/payment.js"));
+app.use("/message", require("./routes/sendmessage"));
   
 // Starting server using listen function
 app.listen(port, function (err) {

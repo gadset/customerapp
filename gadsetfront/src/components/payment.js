@@ -86,9 +86,9 @@ export default function Payment(){
     
         const options = {
             key: "rzp_test_hjnHnpkynNqw7v", // Enter the Key ID generated from the Dashboard
-            amount: total*100,
+            amount: value==='later'? 20000 : total*100,
             currency: currency,
-            name: address1['name'],
+            name: "Gadset",
             description: "Test Transaction",
             image: { logo },
             order_id: order_id,
@@ -116,13 +116,13 @@ export default function Payment(){
     
                alert(result.data.msg);
             },
-            prefill: {
-                name:address1['name'],
-                contact: mobile,
-            },
-            notes: {
-                address: address1['city'],
-            },
+            // prefill: {
+            //     name:address1['name'],
+            //     contact: mobile,
+            // },
+            // notes: {
+            //     address: address1['city'],
+            // },
             theme: {
                 color: "#61dafb",
             },
@@ -137,24 +137,31 @@ export default function Payment(){
         <Typography style={{color: '#056AB5',fontSize : '24px',fontFamily:'Poppins', fontStyle:'normal',lineHeight : '28px', fontWeight :600, marginTop:'4px'}}>Payment</Typography>
         <Typography style={{color: '#056AB5',fontSize : '16px',fontFamily:'Open sans', fontStyle:'normal',lineHeight : '22px', fontWeight :400, marginTop:'4px'}}>Selected Device : {model1}</Typography>
         <Grid item spacing={1} sx={{display:'flex', flexDirection:'column',width:'100%'}}>
-        <Grid item sx={{marginTop : '8px'}}>
-      <Box sx={{display:'flex', flexDirection:'row', alignItems:'center'}}>
-        <img src={address} alt="address icon" style={{marginLeft:'-5px'}} />
-        <div>
-        <Typography style={{color: '#494949',fontSize : '16px',fontFamily:'Open sans', fontStyle:'normal',lineHeight : '22px', fontWeight :400, margin:'4px'}}>Address: {mobile}, {address1['name']}, {address1['flat']} </Typography>
-        <Typography style={{color: '#494949',fontSize : '16px',fontFamily:'Open sans', fontStyle:'normal',lineHeight : '22px', fontWeight :400, margin:'4px'}}>{address1['city']}, {address1['landmark']}, {address1['pin']}</Typography>
-        </div>
-      </Box>
-    </Grid>
-
+      
+          {
+            address1.length > 0 ?   <Grid item sx={{marginTop : '8px'}}>  <Box sx={{display:'flex', flexDirection:'row', alignItems:'center'}}>
+            <img src={address} alt="address icon" style={{marginLeft:'-5px'}} />
+            <div>
+            <Typography style={{color: '#494949',fontSize : '16px',fontFamily:'Open sans', fontStyle:'normal',lineHeight : '22px', fontWeight :400, margin:'4px'}}>Address: {mobile}, {address1['name']}, {address1['flat']} </Typography>
+            <Typography style={{color: '#494949',fontSize : '16px',fontFamily:'Open sans', fontStyle:'normal',lineHeight : '22px', fontWeight :400, margin:'4px'}}>{address1['city']}, {address1['landmark']}, {address1['pin']}</Typography>
+            </div>
+          </Box>   </Grid>
+           : <></>
+          }
+  {
+    date1.length > 0 ? 
     <Grid item sx={{marginTop : '8px'}}>
-      <Box sx={{display:'flex', flexDirection:'row', alignItems:'center'}}>
-        <img src={calendar} alt="address icon" />
-        <div>
-        <Typography style={{color: '#494949',fontSize : '16px',fontFamily:'Open sans', fontStyle:'normal',lineHeight : '22px', fontWeight :400, margin:'4px'}}>Date : {date1['date']} </Typography>
-        </div>
-      </Box>
-    </Grid>
+    <Box sx={{display:'flex', flexDirection:'row', alignItems:'center'}}>
+      <img src={calendar} alt="address icon" />
+      <div>
+      <Typography style={{color: '#494949',fontSize : '16px',fontFamily:'Open sans', fontStyle:'normal',lineHeight : '22px', fontWeight :400, margin:'4px'}}>Date : {date1['date']} </Typography>
+      </div>
+    </Box>
+  </Grid>
+  : <></>
+  }
+
+
         <Typography style={{color: '#056AB5',fontSize : '16px',fontFamily:'Open sans', fontStyle:'normal',lineHeight : '22px', fontWeight :600, marginTop:'4px'}}>Select Payment Option</Typography>
         <FormControl>
       <RadioGroup
@@ -163,10 +170,10 @@ export default function Payment(){
       >
         <FormControlLabel value="online" sx={{background: '#FBFBFB',
 boxShadow:' 0px 4px 4px rgba(0, 0, 0, 0.1), inset 0px 4px 4px rgba(0, 0, 0, 0.1)',
-borderRadius: '20px', width:'70%', marginTop:'4px', alignSelf:'center'}} control={<Radio />} label="Pay online" />
+borderRadius: '20px', width:'80%', marginTop:'4px', alignSelf:'center'}} control={<Radio />} label="Pay total online" />
         <FormControlLabel sx={{background: '#FBFBFB',
 boxShadow:' 0px 4px 4px rgba(0, 0, 0, 0.1), inset 0px 4px 4px rgba(0, 0, 0, 0.1)',
-borderRadius: '20px', width:'70%', marginTop:'4px',  alignSelf:'center'}} value="later" control={<Radio />} label="Pay later" />
+borderRadius: '20px', width:'80%', marginTop:'4px',  alignSelf:'center'}} value="later" control={<Radio />} label="Pay Minimum deposit of 200 rupees" />
       </RadioGroup>
     </FormControl>
 

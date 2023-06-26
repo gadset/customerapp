@@ -52,10 +52,10 @@ const AddressForm = ({onData, handlenextpage}) => {
       <Typography style={{color: '#056AB5',fontSize : '16px',fontFamily:'Poppins', fontStyle:'normal', margin:'8px',lineHeight : '24px', fontWeight :600}}>
        Add your Address
       </Typography>
-      <Button sx={{background:' #F0F0F0',
+      {/* <Button sx={{background:' #F0F0F0',
 border:' 1px solid #EDECEC',
 borderRadius: '20px', color:'black', width:'90%'}} variant="contained"> Use my current location</Button>
-      <Divider sx={{margin:'4px', color:'black'}} />
+      <Divider sx={{margin:'4px', color:'black'}} /> */}
         <Grid container spacing={2} sx={{ width: "90%",  display:'flex', flexDirection:'column',      padding: '8px',marginTop:'10px',
     borderRadius : '10px' ,
     textAlign:'left' }}>

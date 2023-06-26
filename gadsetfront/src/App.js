@@ -26,6 +26,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import { Grid } from "@mui/material";
 import FixedNavigation from "./Navbar/BottomNav";
 import Bidding from "./components/Biddingpage";
+import { ToastContainer } from "react-toastify";
 export default function App() {
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -45,6 +46,7 @@ export default function App() {
       <center>
        <Grid className="App" style={{justifyContent:'center', display:'flex', flexDirection:'column', width : isMobile ? '100%' : '400px'}}>
         <ResponsiveAppBar/>
+        <ToastContainer/>
         {/* <div  className="telephone-icon">
         <a href="tel:+918688749458" aria-label="Call us">
         <PhoneIcon sx={{ color: 'white' }} />

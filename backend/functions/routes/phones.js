@@ -5,9 +5,11 @@ const glossary = require('../src/glossary');
 const search = require('../src/search');
 const top = require('../src/top');
 
-const Razorpay = require("razorpay");
 
+const Razorpay = require("razorpay");
+const db = require('../firebase_Setup');
 const router = express.Router();
+const Twilio = require("./Messageservice.js");
 
 router.get('/', function (req, res) {
     var devices;
@@ -116,5 +118,102 @@ router.post("/success", async (req, res) => {
       res.status(500).send(error);
   }
 });
+
+router.post('/sendquote', function (req, res) {
+    //const quotedb = db.collection('Users');
+    async function start() {
+        try {
+            console.log(req.body);
+            const id = req.body.uid;
+            const userJson = {
+              "issue": req.body.issue,
+              "model": req.body.model,
+              "activestate" : true,
+            };
+            const quoteDb = db.collection('Quotes'); 
+            const response = await quoteDb.doc(id).set(userJson);
+            res.send({"response" : "True"});
+            const partref = await db.collection('Partners').get();            
+            partref.docs.map(doc => {
+                Twilio.sendSms({ to: doc.id, 
+                    message: `you got a notification from gadset, click on this linke to see the quotes https://gadsetpartner.web.app/home` }, 
+                    (err,smsData) => {
+                     console.log(smsData);
+                });
+            })
+        
+           var refreshIntervalId =  setInterval(async function() {      
+                const userRef = await db.collection("Quotes").doc(id)
+    .update({
+                 "activestate" : false,
+            });
+               }, 60000); 
+
+            
+          clearInterval(refreshIntervalId);
+  
+          } catch(error) {
+           // res.send(error);
+           console.log(error)
+           res.send({"message" : "false"});
+          }
+    }     
+    start();    
+  })
+  router.post('/submitquote', function (req, res) {
+    //const quotedb = db.collection('Users');
+    console.log(req.body);
+    async function start() {
+        try {
+            const id = req.body.uid;
+            console.log(id);
+            const userRef = db.collection("Quotes").doc(id);
+    const response = await userRef.get();
+    console.log(response.data());
+        if(response.data().activestate === true){
+            console.log("ifcond");
+            var jsonformat={};
+            jsonformat[req.body.name] = {
+                "amount" : req.body.amount,
+                "email" : req.body.email,
+                "name" : req.body.name,
+                "delivery" : req.body.delivery,
+                "warranty" : req.body.warranty,
+                "address": req.body.address,
+            }; 
+            console.log(req.body.delivery);
+            if(req.body.delivery == 'Service center') {
+                db.collection("Quotes").doc(id).collection("quotes").add({   "amount" : req.body.amount,
+                "email" : req.body.email,
+                "name" : req.body.name,
+                "delivery" : req.body.delivery,
+                "warranty" : req.body.warranty,
+                "address": req.body.address,})
+            } 
+          else{
+            db.collection("Quotes").doc(id).collection("quotes").add({   "amount" : req.body.amount,
+            "email" : req.body.email,
+            "name" : req.body.name,
+            "delivery" : req.body.delivery,
+            "warranty" : req.body.warranty,})
+          }
+        //    db1.doc(id).update({
+        //    // quote : [...jsonformat]
+        //    jsonformat
+        //    }, {merge:true})
+        console.log("done");
+            res.send({"message" : "Succefully submitted"});        
+        }
+        else{
+            console.log("elsecond");
+            res.send({"message" : "this bid is closed"});
+        }
+        
+          } catch(error) {
+            res.send(error);
+          }
+    }
+    start();   
+  })
 
    module.exports = router ;

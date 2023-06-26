@@ -158,10 +158,10 @@ const useStyles = makeStyles((theme) => ({
       const user = auth.currentUser;
       if(user){
       dispatch(setMobileValue(user.phoneNumber));
-     history.push({
-       pathname : '/getbid',
+      history.push({
+      pathname : '/service',
        state : {model : mod ,iss :arr, total:total, price: price}
-       })
+       })  
       }
       else{
         setModalOpen(true);
