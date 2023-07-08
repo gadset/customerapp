@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import App from './Appnew';
 import { Provider } from 'react-redux'
 import store from './store'
 import { ThemeProvider } from '@mui/material/styles';
@@ -11,6 +11,7 @@ import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { HashRouter } from 'react-router-dom/cjs/react-router-dom';
 const firebaseConfig = {
   // ...
   // The value of `databaseURL` depends on the location of the database
@@ -42,7 +43,6 @@ root.render(
      <App />
      </ThemeProvider>
      </Provider>
- 
   </React.StrictMode>
 );
 

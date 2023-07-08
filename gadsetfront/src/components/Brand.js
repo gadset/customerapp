@@ -57,8 +57,6 @@ paper: {
   borderRadius: '30px 30px 0px 0px',
   position:'absolute',
   bottom:0,
-
-
 },
 });
 

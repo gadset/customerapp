@@ -1,7 +1,6 @@
 {
   "name": "gadsetfront",
   "version": "0.1.0",
-  "homepage": "https://gadset.github.io/customerapp",
   "private": true,
   "dependencies": {
     "@capacitor/android": "4.7.3",
@@ -30,6 +29,7 @@
     "react-dom": "^18.2.0",
     "react-google-maps": "^9.4.5",
     "react-js-loader": "^0.1.0",
+    "react-loader-spinner": "^5.3.4",
     "react-phone-number-input": "^3.2.23",
     "react-redux": "^8.0.5",
     "react-router-dom": "^5.3.4",

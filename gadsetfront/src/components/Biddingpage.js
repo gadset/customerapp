@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { setIssueValue } from '../reduxstore';
 import { ToastContainer, toast } from 'react-toastify';
+import { ProgressBar } from  'react-loader-spinner'
 export default function Bidding(){
     const location = useLocation();
     //const mod = location.state.name ;
@@ -31,6 +32,7 @@ export default function Bidding(){
   const [status, setStatus] = useState(false);
   const [latlng, setlatlng] = useState(null);
   const [sec11, setsec11] = useState(60);
+  const [quotebutton, setquotebutton] = useState(true);
 const timerId = useRef();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -171,7 +173,6 @@ const addtodatabase = async() => {
 }
 
 async function handlesend(){
-  
   const auth= getAuth();
   const user = auth.currentUser;
   var uid;
@@ -191,8 +192,10 @@ async function handlesend(){
       }),   
     });
     const json = await response.json();
+    setquotedata([]);
     if(json["response"] === "True"){  
       setistimerrunning(true);
+      setquotebutton(false);
       toast.success("wait for one minute to get quotes")
 //      const querySnapshot = await getDocs(collection(firestoredb, "Quotes"));
 //      querySnapshot.forEach((doc) => {
@@ -201,6 +204,7 @@ async function handlesend(){
 //  setquotedata(quotedata);
 //  console.log(quotedata);
 //     setloading(true);
+      setquotedata([]);
      const newTimerId = setTimeout(async() => {
       const querySnapshot = await getDocs(collection(firestoredb, "Quotes", uid, 'quotes'));
       querySnapshot.forEach((doc, index) => {
@@ -220,6 +224,8 @@ async function handlesend(){
       setCountDown(0);
       //setTimerId(null);
       setistimerrunning(false);
+      setsec11(60);
+      setquotebutton(true);
     }, 60000); // 5 minutes in milliseconds
 
     //setTimerId(newTimerId);
@@ -260,7 +266,11 @@ const minutes = String(Math.floor(countDown / 60)).padStart(2, 0);
             ))
           }
         </Select>
-        <Button onClick={handlesend}>get quotes</Button>
+        {
+          quotebutton ? <Button onClick={handlesend}>get quotes</Button> :
+          <Button disabled>Get Quotes</Button>
+        }
+        
 
       </FormControl>
 
@@ -268,13 +278,27 @@ const minutes = String(Math.floor(countDown / 60)).padStart(2, 0);
           {/* <Typography>
  minutes : {minutes} :: seconds: {seconds}
 </Typography>  */}
-<Typography>{sec11}</Typography>
+<Typography>Seconds : {sec11}</Typography>
 
+{
+  quotebutton ?
+<></>
+: 
+<ProgressBar
+height="80"
+width="80"
+ariaLabel="progress-bar-loading"
+wrapperStyle={{}}
+wrapperClass="progress-bar-wrapper"
+borderColor = '#F4442E'
+barColor = '#51E5FF'
+/>
+}
         </Grid>
         <Grid>
 
         {
-          loading ?
+          quotedata.length > 0 ?
           quotedata.map((quo, index) => (
           <Card key={quo.model} elevation={2} sx={{margin:'8px', padding:'8px'}}>
               <Typography>amount : {quo.amount}</Typography>

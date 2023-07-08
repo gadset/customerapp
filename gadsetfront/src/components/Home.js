@@ -134,6 +134,7 @@ const HomePage = () => {
         pathname:'/brands',
         //state : {mod : mod, issue : iss}
       })
+      console.log("running")
     }
  else{
   toast("This feature is not built yet.");

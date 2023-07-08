@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
 } from "react-router-dom";
 import Brands from "./components/Brands";
 import Cashify from "./components/Cashify";
