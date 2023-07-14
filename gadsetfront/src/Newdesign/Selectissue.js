@@ -61,7 +61,7 @@ const SelectIssue = () => {
     }
     const issues1 = [
         {
-          name: 'Glass Replacement and also many other to follow',
+          name: 'Glass Replacement ',
           description:
             'The glass on my device is cracked and needs to be replaced.',
           img : glass2,

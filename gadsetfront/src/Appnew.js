@@ -34,6 +34,8 @@ import Selectdevice from "./Newdesign/Selectdevice";
 import SelectIssue from "./Newdesign/Selectissue";
 import Preference from "./Newdesign/Preference";
 import Getquotes from "./Newdesign/Getquotes";
+import Phonesignin from "./Newdesign/Phonesignin1";
+import StepperForm1 from "./Newdesign/Stepper1";
 export default function App() {
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -71,6 +73,15 @@ export default function App() {
          <Route path='/getquotes'>
           <Getquotes/>
          </Route>
+         <Route path='/numberinput'>
+          <Phonesignin/>
+         </Route>
+         <Route path='/stepper1'>
+          <StepperForm1/>
+         </Route>
+         <Route path='/paymentsuccess'>
+            <PaymentSuccessful/>
+          </Route>
         </Switch>
         </Grid>
         <div style={{position: 'fixed', bottom: 0, left: 0, right: 0 }}>

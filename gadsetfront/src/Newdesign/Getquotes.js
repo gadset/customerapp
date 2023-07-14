@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Watch } from  'react-loader-spinner'
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { makeStyles } from '@mui/styles';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const useStyles = makeStyles({
     filterbutton : {
@@ -15,6 +16,7 @@ const useStyles = makeStyles({
 const Getquotes = () => {
     const [show, setShow] = useState(false);
     const theme = useTheme();
+    const history = useHistory();
     return(
 <Box sx={{marginTop:'8px', display:'flex', flexDirection : 'column', alignItems:'center'}}>
     {
@@ -50,12 +52,11 @@ const Getquotes = () => {
             </Stack>
 
         <Grid container spacing={3} sx={{ marginTop:'10px',width:'100%', marginLeft:'0'}} >
-            <Grid sx={{height: '200px', width:'100%', backgroundColor:theme.palette.background.main, margin:'8px' }}></Grid>
+            <Grid onClick={() => history.push('/numberinput')} sx={{height: '200px', width:'100%', backgroundColor:theme.palette.background.main, margin:'8px' }} ></Grid>
             <Grid sx={{height: '200px', width:'100%', backgroundColor:theme.palette.background.main, margin:'8px' }}></Grid>
         </Grid>
         </Box>
     }
-  
 </Box>
     )
 }

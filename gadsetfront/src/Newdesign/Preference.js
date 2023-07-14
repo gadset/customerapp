@@ -11,7 +11,7 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const Preference = () => {
     const [value, setValue] = useState('Service center');
-    const [value2, setValue2] = useState('zero warranty');
+    const [value2, setValue2] = useState('With warranty');
     const [value3, setValue3] = useState('Normal');
     const history = useHistory();
     const handleChange = (e) => {

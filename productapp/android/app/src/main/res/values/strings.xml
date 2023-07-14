@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">partnerapp</string>
+    <string name="title_activity_main">partnerapp</string>
+    <string name="package_name">io.ionic.partnerapp</string>
+    <string name="custom_url_scheme">io.ionic.partnerapp</string>
+</resources>

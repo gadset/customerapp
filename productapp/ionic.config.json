@@ -1,0 +1,8 @@
+{
+    "name": "partnerapp",
+    "integrations": {
+      "capacitor": {}
+    },
+    "type": "react"
+  }
+  

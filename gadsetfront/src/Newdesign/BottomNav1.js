@@ -7,6 +7,7 @@ import ForumIcon from '@mui/icons-material/Forum';
 import WifiCalling3Icon from '@mui/icons-material/WifiCalling3';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { useTheme } from '@emotion/react';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 
 export default function FixedNavigation1() {
@@ -20,6 +21,7 @@ export default function FixedNavigation1() {
               <BottomNavigationAction label="Chat" icon={<ForumIcon sx={{color:theme.palette.primary.main}} />} />
               <BottomNavigationAction label="Call" icon={<WifiCalling3Icon sx={{color:theme.palette.primary.main}} />} />
               <BottomNavigationAction label="Whatsapp" icon={<WhatsAppIcon sx={{color:theme.palette.primary.main}} />} />
+              <BottomNavigationAction label="Profile" icon={<AccountCircleOutlinedIcon sx={{color:theme.palette.primary.main}} />} />
             </BottomNavigation>
           </Paper>
         </Box>

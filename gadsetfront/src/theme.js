@@ -31,11 +31,12 @@ const theme = createTheme({
       fontSize: '14px',
       fontStyle: 'normal',
       fontWeight: '400',
-      lineHeight: 'normal',
+      lineHeight:'normal',
      },
      h4 : {
-      fontFamily : "Inria Sans",
-      fontSize : '18px'
+      fontFamily : "Work Sans",
+      fontSize : '18px',
+      fontWeight: '500',
      },
      h5 : {
       color: '#000',
@@ -51,9 +52,35 @@ lineHeight: 'normal',
       styleOverrides: {
         root: {
           background :'#AAA',
-          borderRadius : '10px'
+          borderRadius : '10px',
         },
       },
+    },
+    MuiTextField : {
+      styleOverrides : {
+        root : {
+          borderRadius: '5px',
+background:'#D9D9D9',
+        }
+      }
+    },
+    MuiGrid : {
+      styleOverrides : {
+        root : {
+          marginLeft : '0px',
+          marginRight : '0px',
+          paddingLeft : '0px',
+          paddingRight : '0px'
+        },
+        item : {
+          root : {
+            marginLeft : '0px',
+            marginRight : '0px',
+            paddingLeft : '0px',
+            paddingRight : '0px'
+          }
+        }
+      }
     },
   },
 });
