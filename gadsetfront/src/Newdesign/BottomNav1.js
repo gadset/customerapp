@@ -13,10 +13,11 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 export default function FixedNavigation1() {
     const theme = useTheme();
     return (
-        <Box sx={{ zIndex : 999, background : 'white' }}>
-          <Paper  elevation={3}>
+        <Box sx={{ zIndex : 999, background : 'white', height:'54px' }}>
+          <Paper  elevation={3} >
             <BottomNavigation
             showLabels
+            sx={{display:'flex', justifyContent:'space-between'}}
             >
               <BottomNavigationAction label="Chat" icon={<ForumIcon sx={{color:theme.palette.primary.main}} />} />
               <BottomNavigationAction label="Call" icon={<WifiCalling3Icon sx={{color:theme.palette.primary.main}} />} />

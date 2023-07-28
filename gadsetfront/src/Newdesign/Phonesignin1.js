@@ -15,6 +15,7 @@ import { doc, setDoc, getFirestore,addDoc, collection } from "firebase/firestore
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Phonenumber1 from "./Phonenumber1";
 import { makeStyles } from "@mui/styles";
+import { useTheme } from "@emotion/react";
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -23,6 +24,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+//auth().settings.appVerificationDisabledForTesting = true;
 // Add a new document in collection "cities"
 function setUpRecaptha(number) {
  // var appVerifier = new RecaptchaVerifier('recaptcha-container');
@@ -57,6 +59,7 @@ const Phonesignin = ({total}) => {
   const [flag, setFlag] = useState(false);
   const [otp, setOtp] = useState("");
   const [result, setResult] = useState("");
+  const theme = useTheme();
 //const total = location.state.total;
   //const { setUpRecaptha } = useUserAuth();
   const history = useHistory();
@@ -79,12 +82,14 @@ const Phonesignin = ({total}) => {
   const getOtp = async (e) => {
     e.preventDefault();
     console.log(number);
+    let newnum = '+91' + number;
+    console.log(newnum);
     setError("");
     if (number === "" || number === undefined)
       return setError("Please enter a valid phone number!");
     try {
-      dispatch(setMobileValue(number));
-      const response = await setUpRecaptha(number);
+      dispatch(setMobileValue(newnum));
+      const response = await setUpRecaptha(newnum);
       setResult(response);
       console.log(response);
       setFlag(true);
@@ -108,14 +113,22 @@ const Phonesignin = ({total}) => {
       if(user){
         uid = user.uid;
       }
-      const docRef = await addDoc(collection(firestoredb, "Users"), {
-       "number" : number,    
-      "uid" : uid,
-      });
-      console.log(docRef.id);
+      const docRef = doc(firestoredb, "Users", number);
+      const data = {
+                 "number" : number
+                 }
+     setDoc(docRef, data)
+     .then(() => {
+         console.log("Document has been added successfully");
+     })
+     .catch(error => {
+         console.log(error);
+     })
       dispatch(setUserIdValue(docRef.id));
+      localStorage['verified'] = "yes";
+      localStorage['phonenumber'] = number;
       history.push({
-        pathname : '/stepper1',
+        pathname : '/issuepage',
       })
     } catch (err) {
       setError(err.message);
@@ -124,35 +137,45 @@ const Phonesignin = ({total}) => {
 
   return (
     <Grid container  sx={{ marginLeft: 0, marginTop : '10px' }} style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-      <div style={{width: isMobile ? '90%' : '40%', display:'flex', flexDirection:'column',backgroundColor : '#ffffff', justifyContent:'flex-start',
-   borderRadius : '10px', padding:'8px'}}>
-        <Typography style={{margin:'8px'}}>Please sign in with your phone number</Typography>
+      <div style={{width: isMobile ? '95%' : '40%', display:'flex', flexDirection:'column',backgroundColor : '#ffffff',textAlign : 'left' }}>
+        <Typography variant="h5" style={{marginTop:theme.spacing(1)}}>Enter number</Typography>
         {error && <Alert variant="danger">{error}</Alert>}
         <Form onSubmit={getOtp}>
-          <Form.Group style={{margin:'8px'}} controlId="formBasicEmail">
-            <PhoneInput
+          <Form.Group controlId="formBasicEmail">
+            {/* <PhoneInput
             defaultCountry="IN"
               value={number}
               onChange={setNumber}
               inputComponent={Phonenumber1}
               placeholder="Enter phone number"
               disabled={flag}
-            />
+            /> */}
+             <TextField
+        hiddenLabel
+          size="small"
+          placeholder='868 874 9458'
+          fullWidth
+          variant='outlined'
+          InputProps={{
+            classes: { input: {
+              padding: '8px',
+            } },
+          }}
+          value={number}
+          onChange={(e)=>setNumber(e.target.value)}
+          disabled={flag}
+        />
             <div style={{margin:'8px'}} id="recaptcha-container"></div>
           </Form.Group>
           <div style={{ display: !flag ? "block" : "none" }} className="button-right">
-            <Button type="submit" variant="contained" id="sendotp" >
+            <Button type="submit" id="sendotp" >
               Send Otp
             </Button>
           </div>
         </Form>
-
-
-
-        
         <Form onSubmit={verifyOtp} style={{ display: flag ? "block" : "none" }}>
-        <Typography>Verify Otp</Typography>
-          <Form.Group style={{margin:'8px'}} controlId="formBasicOtp">
+        <Typography variant="h5" style={{marginTop:theme.spacing(1)}}>Verify Otp</Typography>
+          <Form.Group controlId="formBasicOtp">
           
             <TextField
               type="otp"
@@ -164,8 +187,8 @@ const Phonesignin = ({total}) => {
               size='small'
             />
           </Form.Group>
-          <div className="button-right">
-            <Button type="submit" variant="contained">
+          <div className="button-right" style={{marginTop:theme.spacing(1)}}>
+            <Button type="submit" >
               Verify
             </Button>
           </div>

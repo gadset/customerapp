@@ -24,6 +24,20 @@ export const IssueSlice = createSlice({
   },
 })
 
+export const quotesSlice = createSlice({
+  name: 'quotes',
+  initialState: {
+    value: [],
+  },
+  reducers: {
+    setquoteValue: (state, action) => {
+      state.value = action.payload
+    },
+  },
+})
+
+
+
 export const AddressSlice = createSlice({
   name: 'address',
   initialState: {
@@ -83,6 +97,17 @@ export const UserIdSlice = createSlice({
     },
   },
 })
+export const partnerSlice = createSlice({
+  name: 'partner',
+  initialState: {
+    value: {},
+  },
+  reducers: {
+    setpartnerValue: (state, action) => {
+      state.value = action.payload
+    },
+  },
+})
 // Action creators are generated for each case reducer function
 export const {setModelValue} = modelSlice.actions
 export const {setIssueValue} = IssueSlice.actions
@@ -91,6 +116,8 @@ export const {setDateValue} = DateSlice.actions
 export const {setMobileValue} = MobileSlice.actions
 export const {setImageValue} = ImageSlice.actions
 export const {setUserIdValue} = UserIdSlice.actions
+export const {setquoteValue} = quotesSlice.actions
+export const {setpartnerValue} = partnerSlice.actions
 
 const modelReducer = modelSlice.reducer
 const issueReducer = IssueSlice.reducer
@@ -99,4 +126,7 @@ const DateReducer = DateSlice.reducer
 const MobileReducer = MobileSlice.reducer
 const ImageReducer = ImageSlice.reducer
 const UserReducer = UserIdSlice.reducer
-export {modelReducer, issueReducer, addressReducer, DateReducer, MobileReducer, ImageReducer, UserReducer};
+const quotesReducer = quotesSlice.reducer
+const partnerreducer = partnerSlice.reducer
+export {modelReducer, issueReducer, addressReducer, DateReducer, MobileReducer, ImageReducer, UserReducer,
+quotesReducer, partnerreducer};

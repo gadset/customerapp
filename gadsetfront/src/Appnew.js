@@ -36,6 +36,7 @@ import Preference from "./Newdesign/Preference";
 import Getquotes from "./Newdesign/Getquotes";
 import Phonesignin from "./Newdesign/Phonesignin1";
 import StepperForm1 from "./Newdesign/Stepper1";
+import Orders from "./Newdesign/orders";
 export default function App() {
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -82,9 +83,12 @@ export default function App() {
          <Route path='/paymentsuccess'>
             <PaymentSuccessful/>
           </Route>
+          <Route path='/orders'>
+            <Orders/>
+          </Route>
         </Switch>
         </Grid>
-        <div style={{position: 'fixed', bottom: 0, left: 0, right: 0 }}>
+        <div style={{position: 'fixed', bottom: 0 ,width:'100%', left:0, right : 0}}>
 <FixedNavigation1/>
 </div>
       </Grid> 

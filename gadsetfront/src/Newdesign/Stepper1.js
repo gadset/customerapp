@@ -16,6 +16,7 @@ import { Link , useLocation} from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
 import ResponsiveAppBar from "../Navbar/Navbar";
 import Placeorder from "./Placeorder1";
+import Paymentnew from "./paymentnew";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -92,30 +93,30 @@ export default function StepperForm1() {
 
   const steps = [
     {
-      label: 'Add Address',
+      label: 'Address',
       component: <AddressForm1 onData={handleData} />,
     },
     {
-      label: 'Date and Time',
+      label: 'Schedule',
       component: <DateTime1 onDate={handleDatetime}/>,
     },
     {
-      label: 'Price Summary',
+      label: 'Payment',
       component: <PriceSummary1 model={model1} total={total} issue={issues1} addres={address} datetime={Datetime} mobile={mobile} delivery={delivery} />,
     },
     {
-      label : 'Payment',
-      component :<Placeorder total={total}/>
+      label : 'Place order',
+      component :<Paymentnew/>
     }
   ];
 
   const steps1 = [
     {
-      label: 'Price Summary',
+      label: 'Payment',
       component: <PriceSummary1 model={model1} issue={issues1} mobile={mobile} delivery={delivery}/>,
     },
     {
-      label : 'Payment',
+      label : 'Place order',
       component :<Placeorder/>
     }
   ];
@@ -130,7 +131,7 @@ export default function StepperForm1() {
       case 2:
         return <PriceSummary1 handlenextpage={handleNext} delivery={delivery} />;
       case 3:
-        return <Placeorder />;
+        return <Paymentnew/>;
       default:
         return "Unknown stepIndex";
     }
@@ -148,11 +149,11 @@ export default function StepperForm1() {
   }
 
   return delivery=== "Doorstep delivery" ? (
-    <Grid sx={{ marginLeft: 0, marginTop : '10px', marginBottom:'50px' }} className={classes.root}>
+    <Grid sx={{ marginLeft: 0, marginTop : '8px', marginBottom:'50px' }} className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel connector={<StepConnector />}>
         {steps.map((step,index) => (
           <Step key={step.label}>
-            <StepLabel style={{fontSize : '10px',fontFamily:'Open sans', fontStyle:'normal', margin:'8px',lineHeight : '14px', fontWeight :400}}>{step.label}</StepLabel>
+            <StepLabel style={{fontSize : '10px',fontFamily:'Open sans', fontStyle:'normal',lineHeight : '14px', fontWeight :400}}>{step.label}</StepLabel>
           </Step>
         ))}
       </Stepper>
@@ -173,13 +174,13 @@ export default function StepperForm1() {
               {getStepContent(activeStep)}
             </Typography>
             <div>
-              <Button
+              {/* <Button
                 disabled={activeStep === 0}
                 onClick={handleBack}
                 className={classes.button}
               >
                 Back
-              </Button>
+              </Button> */}
               {/* <Button
                 variant="contained"
                 color="primary"
@@ -196,11 +197,11 @@ export default function StepperForm1() {
   )
    :
    (
-    <Grid sx={{ marginLeft: 0, marginTop : '10px', marginBottom:'30px' }} className={classes.root}>
+    <Grid sx={{ marginLeft: 0, marginTop : '8px', marginBottom:'30px' }} className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel connector={<StepConnector />}>
         {steps1.map((step,index) => (
           <Step key={step.label}>
-            <StepLabel style={{fontSize : '10px',fontFamily:'Open sans', fontStyle:'normal', margin:'8px',lineHeight : '14px', fontWeight :400}}>{step.label}</StepLabel>
+            <StepLabel style={{fontSize : '10px',fontFamily:'Open sans', fontStyle:'normal',lineHeight : '14px', fontWeight :400}}>{step.label}</StepLabel>
           </Step>
         ))}
       </Stepper>

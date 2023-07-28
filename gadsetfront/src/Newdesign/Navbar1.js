@@ -97,7 +97,7 @@ function Responsiveappbarnew() {
   //  setAnchorElNav(null);
   setAnchorElNav(false);
   history.push({
-    pathname:'/' + nextlink
+    pathname: nextlink
   })
   };
 
@@ -122,11 +122,11 @@ useEffect(() => {
 
 
   return (
-    <Box spacing={2} container style={{display : 'flex', flexGrow:1, flexDirection : isMobile ? "column" : "row", alignItems:'center', justifyContent:'flex-start'}}>
-    <AppBar position="static" color="transparent" style={{marginTop:0, boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}}>
+    <Box spacing={2} container style={{display : 'flex', flexGrow:1, flexDirection : isMobile ? "column" : "row", alignItems:'center', justifyContent:'flex-start',}}>
+    <AppBar position="static" color="transparent" sx={{marginTop:0,boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters >
-          <Grid container style={{ display:'flex', flexDirection:'row', justifyContent:'space-between',alignItems:'center'}}>
+          <Grid container style={{ display:'flex', flexDirection:'row', justifyContent:'space-between',alignItems:'center', }}>
             <Grid item>
           {/* <Typography
             variant="h5"
@@ -144,7 +144,12 @@ useEffect(() => {
             }}
           >  </Typography> */}
              <Typography variant="h4" style={{
-                color : theme.palette.primary.main
+               color: '#000',
+               fontFamily: 'Cinzel Decorative',
+               fontSize: '24px',
+               fontStyle: 'normal',
+               fontWeight: '400',
+               lineHeight: 'normal',
              }
              }>
                 Tamboola
@@ -163,20 +168,35 @@ useEffect(() => {
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
+              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+              anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
               keepMounted
               open={anchorElNav}
               onClose={() => handleCloseNavMenu("")}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: 'visible',
+                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                  mt: 1.5,
+                  '&:before': {
+                    content: '""',
+                    display: 'block',
+                    position: 'absolute',
+                    top: 20,
+                    right: 20,
+                    width: 10,
+                    height: 10,
+                    bgcolor: 'background.paper',
+                    transform: 'translateY(-50%) rotate(45deg)',
+                    zIndex: 0,
+                  },
+                },
+              }}
+              
             >
               <Grid
-              sx={{ height :'100'}}>
+              sx={{ height :'80vh'}}>
   <IconButton onClick={() => handleCloseNavMenu('')} sx={{position:'absolute', right:'10px', top :'10px'}}>
     <HighlightOffIcon sx={{color:theme.palette.primary.main}}/>
   </IconButton>
@@ -185,27 +205,27 @@ useEffect(() => {
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
              // ))} */}
-               <MenuItem key='home' sx={{marginTop:'30px'}} onClick={() => handleCloseNavMenu('brands')}>
+               <MenuItem key='home' sx={{marginTop:'30px'}} onClick={() => handleCloseNavMenu('/')}>
                 <HomeIcon/>
                   <Typography textAlign="center" variant='body1' style={{margin:'8px'}}>Home</Typography>
                 </MenuItem>
-                <MenuItem key='profile' onClick={() => handleCloseNavMenu('brands')}>
+                <MenuItem key='profile' onClick={() => handleCloseNavMenu('/')}>
                 <AccountCircleOutlinedIcon/>
                 <Typography textAlign="center" variant='body1' style={{margin:'8px'}} >Profile</Typography>
                 </MenuItem>
-                <MenuItem key='orders' onClick={() => handleCloseNavMenu('brands')}>
+                <MenuItem key='orders' onClick={() => handleCloseNavMenu('/orders')}>
                 <GradingOutlinedIcon/>
                 <Typography textAlign="center" variant='body1' style={{margin:'8px'}} >Orders</Typography>
                 </MenuItem>
-                <MenuItem key='saved' onClick={() => handleCloseNavMenu('brands')}>
+                <MenuItem key='saved' onClick={() => handleCloseNavMenu('/')}>
                 <HomeOutlinedIcon/>
                 <Typography textAlign="center" variant='body1' style={{margin:'8px'}} >saved</Typography>
                 </MenuItem>
-                <MenuItem key='terms' onClick={() => handleCloseNavMenu('brands')}>
+                <MenuItem key='terms' onClick={() => handleCloseNavMenu('/')}>
                 <PlaylistAddCheckOutlinedIcon/>
                 <Typography textAlign="center" variant='body1' style={{margin:'8px'}} >Terms, Policies and licenses</Typography>
                 </MenuItem>
-                <MenuItem key='faq' onClick={() => handleCloseNavMenu('brands')}>
+                <MenuItem key='faq' onClick={() => handleCloseNavMenu('/')}>
                 <QuizOutlinedIcon/>
                 <Typography textAlign="center" variant='body1' style={{margin:'8px'}} >Browse FAQ's</Typography>
                 </MenuItem>

@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { modelReducer, addressReducer, issueReducer, DateReducer, MobileReducer, ImageReducer, UserReducer } from './reduxstore'
+import { modelReducer, addressReducer, issueReducer, DateReducer, MobileReducer, ImageReducer, UserReducer, quotesReducer, partnerreducer } from './reduxstore'
 export default configureStore({
   reducer: {
     model : modelReducer,
@@ -9,5 +9,7 @@ export default configureStore({
     mobile : MobileReducer,
     image : ImageReducer,
     userid : UserReducer,
+    quotes : quotesReducer,
+    partner : partnerreducer,
   },
 })

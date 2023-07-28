@@ -20,6 +20,9 @@ import { useState } from 'react';
 import { getDatabase, ref, child, get } from "firebase/database";
 import { setMobileValue, setModelValue } from '../reduxstore';
 import { useDispatch } from 'react-redux';
+import search from './Newlogos/search.svg';
+import { useTheme } from '@emotion/react';
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 
 const StyledTextField = styled(TextField)`
   background-color: #D9D9D9;
@@ -31,13 +34,19 @@ const Selectdevice = () => {
     const [devices, setDevices] = useState([]);
     const [devicearray, setDevicearr]= useState([]);
     const [phone,setPhone] = useState('');
+    const location = useLocation();
+    const device = location.state.device;
+    const theme = useTheme();
     const dispatch = useDispatch();
     const handleChangebrand = (e) => {
-      setBrand(e.target.value);
+      let bra = e.target.value;
+      console.log(bra);
+      setBrand(bra);
       const dbRef = ref(getDatabase());
-        get(child(dbRef, brand)).then((snapshot) => { 
+        get(child(dbRef, bra)).then((snapshot) => { 
           if (snapshot.exists()) {
             setDevices(snapshot.val());    
+            console.log(snapshot.val());
             setDevicearr(Object.keys(snapshot.val()))  ;        //console.log(data)
               console.log(snapshot.val());
             } else {
@@ -50,28 +59,40 @@ const Selectdevice = () => {
     
     const data1 = [
         {"name" : "apple" , "logo" : apple},
-        {"name" : "Xiaomi", "logo" :mi },
-        {"name" : "Motorola", "logo" :motorola },
-        {"name" : "Nothing" , "logo" : nothing},
-        {"name" : "OnePlus", "logo" : oneplus },
-        {"name" : "Oppo", "logo" : oppo},
-          {"name" : "Poco", "logo" : poco},
-          {"name" : "Realme" , "logo" : realme },
+        {"name" : "xiaomi", "logo" :mi },
+        {"name" : "motorola", "logo" :motorola },
+        {"name" : "nothing" , "logo" : nothing},
+        {"name" : "onePlus", "logo" : oneplus },
+        {"name" : "oppo", "logo" : oppo},
+          {"name" : "poco", "logo" : poco},
+          {"name" : "realme" , "logo" : realme },
           {"name" : "samsung", "logo" :samsung },
-          {"name" : "Vivo", "logo" :vivo },
+          {"name" : "vivo", "logo" :vivo },
 
     ]
 
     const handleDeviceSelected = () =>{
-      dispatch(setModelValue(phone));
-      history.push('/issuepage')
+      dispatch(setModelValue(brand + phone));
+      if(localStorage.getItem("verified")!=='yes'){
+        history.push('/numberinput');
+      }
+      else{
+        dispatch(setMobileValue(localStorage.getItem('phonenumber')))
+        history.push({
+          pathname : '/issuepage',
+        })
+      }
+    
     }
     return(
         <Grid container sx={{display:'flex', justifyContent:'center', textAlign:'left', marginTop:'10px'}}>
-            <Grid item sx={{width:'90%', margin:'4px'}}>
+          {
+            device === 'phone' ? <>
+             <Grid item sx={{width:'95%'}}>
                 <Typography variant='h4'>Select Brand</Typography>
             <StyledTextField
-          label=""
+            hiddenLabel
+            size="small"
           select
           placeholder="Search your brand"
           fullWidth
@@ -81,7 +102,7 @@ const Selectdevice = () => {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton edge="end">
-                  <SearchOutlinedIcon sx={{color:'#000',fontSize:'30px'}}/>
+                <img src={search} alt='searchbox'/>
                 </IconButton>
               </InputAdornment>
             ),
@@ -96,11 +117,11 @@ const Selectdevice = () => {
 
             </StyledTextField>
             </Grid>
-
-            <Grid item item sx={{width:'90%', margin:'4px'}}>
+            <Grid item item sx={{width:'95%', marginTop: theme.spacing(2)}}>
             <Typography variant='h4'>Select Device</Typography>
             <StyledTextField
-          label=""
+           hiddenLabel
+           size="small"
           select
           placeholder="Search your device"
           fullWidth
@@ -110,13 +131,13 @@ const Selectdevice = () => {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton edge="end">
-                  <SearchOutlinedIcon sx={{color:'#000',fontSize:'30px'}}/>
+                <img src={search} alt='searchbox'/>
                 </IconButton>
               </InputAdornment>
             ),
           }}>
             {
-                devicearray.map((brand1) => (
+                devices.map((brand1) => (
                     <MenuItem key={brand1} value={brand1}>
                         {brand1}
                     </MenuItem>
@@ -126,7 +147,56 @@ const Selectdevice = () => {
             </StyledTextField>
             </Grid>
         
-          <Button sx={{padding:'4px', width:'150px', marginTop:'8px'}} onClick={() => handleDeviceSelected()}>Submit</Button>
+
+            </>
+
+            :
+            <>
+                <Grid item sx={{width:'95%'}}>
+                <Typography variant='h4'>Select Brand</Typography>
+            <StyledTextField
+            hiddenLabel
+            size="small"
+          placeholder="Search your brand"
+          fullWidth
+          value={brand}
+          onChange={(e) => handleChangebrand(e)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton edge="end">
+                <img src={search} alt='searchbox'/>
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}></StyledTextField>
+          </Grid>
+          
+          <Grid item item sx={{width:'95%', marginTop: theme.spacing(2)}}>
+            <Typography variant='h4'>Select Device</Typography>
+            <StyledTextField
+           hiddenLabel
+           size="small"
+          placeholder="Search your device"
+          fullWidth
+          value={phone}
+          onChange={(e)=>setPhone(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton edge="end">
+                <img src={search} alt='searchbox'/>
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}>
+            </StyledTextField>
+            </Grid></>
+
+          }
+           
+          
+          <Button sx={{padding:'4px', width:'150px', marginTop: theme.spacing(2)}} onClick={() => handleDeviceSelected()}>Submit</Button>
         </Grid>
     )
 }

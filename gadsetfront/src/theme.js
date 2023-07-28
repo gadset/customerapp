@@ -2,6 +2,14 @@ import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   spacing: 8,
+  typography:{
+    color: '#000',
+fontFamily: 'Work Sans',
+fontSize: '16px',
+fontStyle: 'normal',
+fontWeight: '400',
+lineHeight: 'normal',
+  },
   palette:{
     primary:{
       main : "#000",
@@ -20,10 +28,10 @@ const theme = createTheme({
   typography :{
      body1 : {
       fontFamily  : "Work Sans",
-      fontSize :'16px',
+      fontSize :'14px',
       color: '#000',
       fontStyle : 'normal',
-      fontWeight : '500',
+      fontWeight : '400',
      },
      body2 : {
       color: '#333',
@@ -37,6 +45,7 @@ const theme = createTheme({
       fontFamily : "Work Sans",
       fontSize : '18px',
       fontWeight: '500',
+      margin : '8px',
      },
      h5 : {
       color: '#000',
@@ -45,14 +54,16 @@ fontSize: '20px',
 fontStyle: 'normal',
 fontWeight: '400',
 lineHeight: 'normal',
+margin : '8px',
     }
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          background :'#AAA',
+          background :'#D9D9D9',
           borderRadius : '10px',
+          textTransform:'none'
         },
       },
     },
@@ -60,7 +71,14 @@ lineHeight: 'normal',
       styleOverrides : {
         root : {
           borderRadius: '5px',
-background:'#D9D9D9',
+color: '#000',
+fontFamily: 'Work Sans',
+fontSize: '16px',
+fontStyle: 'normal',
+fontWeight: '400',
+lineHeight: 'normal',
+border: '1px solid #AFB6B4',
+background: 'var(--light-gray, #F0F0F0)',
         }
       }
     },
