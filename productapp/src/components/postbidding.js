@@ -1,7 +1,7 @@
 import { Grid, Typography, Card, TextField, Button, Modal, FilledInput } from '@mui/material'
 import React, { Component, useEffect, useState } from 'react'
 import { getDatabase, ref, child, get } from "firebase/database";
-import { collection, doc, setDoc ,getDocs} from "firebase/firestore"; 
+import { collection, doc, setDoc ,getDocs, getDoc} from "firebase/firestore"; 
 import {auth, firestoredb } from '../index';
 import { Link , useHistory, useLocation} from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
@@ -16,8 +16,8 @@ import Demo from './getlocation';
 import { useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 const useStyles = makeStyles((theme) => ({
     modal: {
       display: 'flex',
@@ -59,10 +59,41 @@ export default function Postbid(){
     const history = useHistory();
     const quote1 = []
     const quote2 =[]
+    const number = location.state.number;
+    console.log(number);
+    const [all, setalldata] = useState('');
+
+
+    useEffect(()=>{
+      if(number){
+        async function start(){
+          const docRef = doc(firestoredb, "Partners", number);
+          const docSnap = await getDoc(docRef);
+           
+    if (docSnap.exists()) {
+     setalldata(docSnap.data());
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
+    }
+        }
+        start();
+    
+  
+      }
+      else{
+       setalldata(JSON.parse(localStorage.getItem('partnerdata')));
+      }
+     console.log(all);
+    }, [])
+  
+
+    //const docid = location.state.docid || '';
 
     const name = useSelector((state) => state.name.value);
     const address = useSelector((state) => state.address.value);
     const email = useSelector((state)=>state.email.value);
+    
     const handledata = async() => {
     const querySnapshot = await getDocs(collection(firestoredb, "Quotes"));
       querySnapshot.forEach((doc) => {
@@ -125,7 +156,7 @@ quote2.push(doc.id);
         else{
           const id1 = quoteid1;
           console.log(id1);
-          const response = await fetch('https://us-central1-backendapp-89bd1.cloudfunctions.net/app/submitquote', {
+          const response = await fetch('http://localhost:8003/submitquote', {
             method: 'POST',
             headers: {
               'Accept': 'application/json, text/plain, */*',
@@ -175,13 +206,12 @@ quote2.push(doc.id);
             'Content-Type': 'application/json'
           }, 
           body : JSON.stringify({
+            "docid" : "1",
+            "alldata" : all,
             "uid" : id1,
-            "name" : name,
-              "email" : email,
-              "amount" : amount,
-              "delivery" : value,
-              "warranty" : value2,
-              "address" : address      
+            "amount" : amount,
+            "delivery" : value,
+            "warranty" : value2,  
           }),   
         });
         const json = await response.json();

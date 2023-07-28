@@ -9,7 +9,7 @@ import { messaging } from "../index";
 import {Row, Col, Toast} from 'react-bootstrap';
 import Demo from "./getlocation";
 import { useDispatch } from "react-redux";
-import { setAddressValue, setemailValue, setnameValue } from "../reduxslice";
+import { setAddressValue, setallValue, setemailValue, setnameValue } from "../reduxslice";
 import { Form, Alert } from "react-bootstrap";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
@@ -84,6 +84,7 @@ function LoginForm() {
   const [result, setResult] = useState("");
   const [verified, setverified] = useState(false);
   const [loggedin, setloggedin] = useState(false);
+  const [docid, setdocid] = useState('');
   const dispatch = useDispatch();
 gettoken(setTokenFound);
 
@@ -118,11 +119,17 @@ onMessageListener().then(payload => {
                "email" : email,
                "name" : name,
                "address" : address,
+               "number" : number,
+               "rating" : Math.floor(Math.random() * 5),
+               "percentage" : Math.floor(Math.random() * 100),
+               "partnerid" : Math.floor(Math.random() * 10000),
                }
-   
+   dispatch(setallValue(data));
+   localStorage.setItem('partnerdata', JSON.stringify(data));
    setDoc(docRef, data)
    .then(() => {
        console.log("Document has been added successfully");
+       setdocid(docRef.id);
    })
    .catch(error => {
        console.log(error);
@@ -152,14 +159,14 @@ onMessageListener().then(payload => {
     //   // ...
     //   console.log('signin successful')
     // })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(error);
-      // ..
-    });
-    console.log('Email:', email);
-    console.log('Password:', password);
+    // .catch((error) => {
+    //   const errorCode = error.code;
+    //   const errorMessage = error.message;
+    //   console.log(error);
+    //   // ..
+    // });
+    // console.log('Email:', email);
+    // console.log('Password:', password);
   };
 
   const getOtp = async (e) => {
@@ -210,6 +217,7 @@ onMessageListener().then(payload => {
         console.log('signin successful');
         history.push({
            pathname : '/addbid',
+           state : {number : number}
         })
       }
       else{

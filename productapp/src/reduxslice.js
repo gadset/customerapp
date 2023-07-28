@@ -36,6 +36,18 @@ export const nameSlice = createSlice({
     },
   })
 
+  export const allSlice = createSlice({
+    name: 'all',
+    initialState: {
+      value: '',
+    },
+    reducers: {
+      setallValue: (state, action) => {
+        state.value = action.payload
+      },
+    },
+  })
+
 
   export const mobileSlice = createSlice({
     name: 'mobile',
@@ -53,11 +65,12 @@ export const {setAddressValue} = addressSlice.actions
 export const {setnameValue} = nameSlice.actions
 export const {setemailValue} = emailSlice.actions
 export const {setMobileValue} = mobileSlice.actions
-
+export const {setallValue} = allSlice.actions
 //reducers
 const addressReducer = addressSlice.reducer
 const nameReducer = nameSlice.reducer
 const emailreducer = emailSlice.reducer
 const mobileReducer = mobileSlice.reducer
+const allReducer = allSlice.reducer
 
-export {addressReducer, nameReducer, emailreducer, mobileReducer};
+export {addressReducer, nameReducer, emailreducer, mobileReducer, allReducer};
