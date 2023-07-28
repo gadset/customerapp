@@ -44,8 +44,8 @@ const number = localStorage['number'];
                        "model" : model1,
                        "issues" : issues1,
                        "partner" : partner
-                       }
-        localStorage['orderdata'] = JSON.stringify(data);
+                       };
+        localStorage.setItem('orderdata', JSON.stringify(data));
         //    updateDoc(docRef, data)
 
         //    .then(() => {

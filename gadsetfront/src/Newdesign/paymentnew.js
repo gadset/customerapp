@@ -24,7 +24,20 @@ export default function Paymentnew(){
   const date1 = useSelector((state)=> state.date.value);
   const mobile = useSelector((state) => state.mobile.value);
   const image = useSelector((state)=>state.image.value);
+ const partner = useSelector((state)=> state.partner.value);
+
+const [amounttotal, setamounttotal] = useState(parseInt(partner['amount']));
+const number = localStorage['number'];
     const history = useHistory();
+
+    const data = {
+        "address" : address1,
+        "date" : date1,
+        "model" : model1,
+        "issues" : issues1,
+        "partner" : partner
+        };
+localStorage.setItem('orderdata', JSON.stringify(data));
 
     var total = 0;
     for (let i = 0; i < issues1.length; i++) {

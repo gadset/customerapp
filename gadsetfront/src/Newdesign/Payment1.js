@@ -24,6 +24,10 @@ export default function Payment1(){
   const date1 = useSelector((state)=> state.date.value);
   const mobile = useSelector((state) => state.mobile.value);
   const image = useSelector((state)=>state.image.value);
+  const partner = useSelector((state)=> state.partner.value);
+
+const [amounttotal, setamounttotal] = useState(parseInt(partner['amount']));
+const number = localStorage['number'];
     const history = useHistory();
 
     var total = 0;
