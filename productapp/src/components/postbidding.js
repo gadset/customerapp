@@ -199,7 +199,7 @@ quote2.push(doc.id);
         const id1 = quoteid1;
         console.log(id1);
         //console.log("helllooooji")
-        const response = await fetch('https://us-central1-backendapp-89bd1.cloudfunctions.net/app/submitquote', {
+        const response = await fetch('http://localhost:8003/submitquote', {
           method: 'POST',
           headers: {
             'Accept': 'application/json, text/plain, */*',

@@ -119,6 +119,21 @@ router.post("/success", async (req, res) => {
   }
 });
 
+async function deleteSubcollectionDocuments(parentCollection, parentDocument, subcollectionName) {
+    const parentRef = db.collection(parentCollection).doc(parentDocument);
+    const subcollectionRef = parentRef.collection(subcollectionName);
+  
+    // Delete all the documents in the subcollection
+    const querySnapshot = await subcollectionRef.get();
+    const batch = db.batch();
+  
+    querySnapshot.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+  
+    await batch.commit();
+  }
+
 router.post('/sendquote', function (req, res) {
     //const quotedb = db.collection('Users');
     async function start() {
@@ -129,11 +144,18 @@ router.post('/sendquote', function (req, res) {
               "issue": req.body.issue,
               "model": req.body.model,
               "activestate" : true,
+              "quality" : req.body.quality,
+              "warranty" : req.body.warranty,
+              "service": req.body.service
+
             };
             const quoteDb = db.collection('Quotes'); 
             const response = await quoteDb.doc(id).set(userJson);
+          deleteSubcollectionDocuments("Quotes", id, "quotes");
+            
             res.send({"response" : "True"});
-            const partref = await db.collection('Partners').get();            
+            const partref = await db.collection('Partners').get();   
+
             partref.docs.map(doc => {
                 Twilio.sendSms({ to: doc.id, 
                     message: `you got a notification from gadset, click on this linke to see the quotes https://gadsetpartner.web.app/home` }, 
@@ -143,7 +165,7 @@ router.post('/sendquote', function (req, res) {
             })
         
            var refreshIntervalId =  setInterval(async function() {      
-                const userRef = await db.collection("Quotes").doc(id)
+            const userRef = await db.collection("Quotes").doc(id)
     .update({
                  "activestate" : false,
             });
@@ -172,36 +194,32 @@ router.post('/sendquote', function (req, res) {
     console.log(response.data());
         if(response.data().activestate === true){
             console.log("ifcond");
-            var jsonformat={};
-            jsonformat[req.body.name] = {
-                "amount" : req.body.amount,
-                "email" : req.body.email,
-                "name" : req.body.name,
-                "delivery" : req.body.delivery,
-                "warranty" : req.body.warranty,
-                "address": req.body.address,
-            }; 
-            console.log(req.body.delivery);
             if(req.body.delivery == 'Service center') {
-                db.collection("Quotes").doc(id).collection("quotes").add({   "amount" : req.body.amount,
-                "email" : req.body.email,
-                "name" : req.body.name,
+                console.log(req.body);
+
+                const response = db.collection("Quotes").doc(id).collection("quotes").add({   
+                "amount" : req.body.amount,
                 "delivery" : req.body.delivery,
                 "warranty" : req.body.warranty,
-                "address": req.body.address,})
+                "docid" : req.body.docid,
+                "alldata" : req.body.alldata
+            })
+                console.log(response);
+                console.log("yes done");
             } 
           else{
-            db.collection("Quotes").doc(id).collection("quotes").add({   "amount" : req.body.amount,
-            "email" : req.body.email,
-            "name" : req.body.name,
+            userRef.collection("quotes").add({"amount" : req.body.amount,
             "delivery" : req.body.delivery,
-            "warranty" : req.body.warranty,})
+            "warranty" : req.body.warranty,
+            "docid" : req.body.docid,
+            "alldata" : req.body.alldata
+            });
+            console.log("yes done");
           }
         //    db1.doc(id).update({
         //    // quote : [...jsonformat]
         //    jsonformat
         //    }, {merge:true})
-        console.log("done");
             res.send({"message" : "Succefully submitted"});        
         }
         else{
@@ -216,4 +234,15 @@ router.post('/sendquote', function (req, res) {
     start();   
   })
 
+
+// router.get('/allquotes',function(req,res){
+
+//     async function start(){
+//     const id = req.body.uid;
+//        const quotes = db.collection("Quotes").doc(id).collection("quotes").get();
+// console.log(quotes);
+// res.send("done"
+// )
+//     }
+// })
    module.exports = router ;

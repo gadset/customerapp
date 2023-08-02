@@ -19,6 +19,7 @@ import { doc, setDoc, getFirestore,addDoc, collection, getDocs } from "firebase/
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useDispatch, useSelector } from 'react-redux';
 import { setpartnerValue } from '../reduxstore';
+import loader from './Newlogos/loader02.gif'
 
 const useStyles = makeStyles( theme => ({
     root: {
@@ -164,16 +165,8 @@ const Getquotes = () => {
     {
         show ? <Box sx={{display:'flex',flexDirection : 'column', alignItems:'center', justifyContent:'center' }}>
               <Typography variant='h4' sx={{marginTop :'4px'}}>Getting Quote's</Typography>
-    <Watch
-  height="80"
-  width="80"
-  radius="48"
-  color= {theme.palette.primary.main}
-  ariaLabel="watch-loading"
-  wrapperStyle={{}}
-  wrapperClassName=""
-  visible={true}
-/>
+   <img src={loader} style={{width: '174px',
+height: '174px'}} alt="loading gif"/>
         </Box>
         : 
         <Box sx={{width:'90%', display:'flex', justifyContent:'center', flexDirection :'column', alignItems:'center',marginTop:theme.spacing(1)}}>
@@ -202,6 +195,7 @@ const Getquotes = () => {
 
         <Grid container spacing={3} sx={{ marginTop:'10px',width:'98%',}} >
             {
+                quotedata.length >0 ?
                 quotedata.map((partner)=> (
                     <Box className={classes.boxstyles}>
                     <Box className={classes.subbox1}>
@@ -245,6 +239,11 @@ IconContainerComponent={BlackStarIcon}/>
         
                    </Box>
                 ))
+
+                   : <>
+                   <Typography variant="body1">No quotes to show here</Typography>
+                   </>
+                
             }
           
         </Grid>

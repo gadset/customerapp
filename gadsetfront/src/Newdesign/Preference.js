@@ -11,6 +11,7 @@ import { useHistory, useLocation } from 'react-router-dom/cjs/react-router-dom.m
 import { useTheme } from '@emotion/react';
 import { useSelector } from 'react-redux';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { ColorRing } from 'react-loader-spinner';
 
 const Preference = () => {
   const location = useLocation();
@@ -20,6 +21,7 @@ const Preference = () => {
     const model = useSelector((state)=>state.model.value);
     const history = useHistory();
     const issuearray = location.state.issues;
+    const [loading, setloading] = useState(false);
     const theme = useTheme();
     const handleChange = (e) => {
         setValue(e.target.value);
@@ -37,13 +39,14 @@ const Preference = () => {
       }
 
       const handlesendquote = async() => {
+        setloading(true);
         const auth= getAuth();
         const user = auth.currentUser;
         var uid;
         if(user){
           uid = user.uid;
         }
-        const response = await fetch('https://us-central1-backendapp-89bd1.cloudfunctions.net/app/sendquote', {
+        const response = await fetch('http://localhost:8003/sendquote', {
             method: 'POST',
             headers: {
               'Accept': 'application/json, text/plain, */*',
@@ -58,7 +61,7 @@ const Preference = () => {
               "service": value
             }),   
           });
-        
+      setloading(false);
       history.push({
         pathname : '/getquotes',
       })
@@ -110,8 +113,17 @@ const Preference = () => {
     </FormControl>
     </Grid>
 
-  <Button sx={{ marginTop:theme.spacing(1), width:'160px', margin:'auto'}} onClick={handlesendquote
+  <Button sx={{ marginTop:theme.spacing(1), width:'160px', margin:'auto'}} disabled={loading} onClick={handlesendquote
   } >Get quotes</Button>
+  <ColorRing
+  visible={loading}
+  height="80"
+  width="80"
+  ariaLabel="blocks-loading"
+  wrapperStyle={{margin:'auto'}}
+  wrapperClass="blocks-wrapper"
+  colors={['#000']}
+/>
 </Grid>
         </Box>
     )

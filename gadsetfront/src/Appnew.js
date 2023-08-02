@@ -57,7 +57,7 @@ export default function App() {
        <Grid className="App" style={{justifyContent:'center', display:'flex', flexDirection:'column', width : isMobile ? '100%' : '400px'}}> 
        <Responsiveappbarnew/>
         <ToastContainer/>
-        <Grid style={{width:'100%'}}>
+        <Grid style={{width:'100%', height:'90vh', overflowY : 'scroll'}}>
         <Switch>
          <Route exact path="/">
             <Home1/>

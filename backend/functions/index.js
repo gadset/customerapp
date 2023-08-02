@@ -8,7 +8,7 @@ const express = require('express'); // Importing express module
   
 const app = express(); // Creating an express object
   
-const port = 8000; 
+const port = 8002; 
 const cors=require("cors");
 const corsOptions ={
    origin:'*', 

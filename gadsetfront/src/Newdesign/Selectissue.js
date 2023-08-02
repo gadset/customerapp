@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import glass2 from '../Images/Issuepage/glass1.jpeg';
 import battery from '../Images/Issuepage/battery1.jpeg';
-import { Grid, Card, Typography, CardMedia, CardContent, Box,Button, Modal } from '@mui/material';
+import { Grid, Card, Typography, CardMedia, CardContent, Box,Button, Modal, IconButton } from '@mui/material';
 import { makeStyles } from "@mui/styles";
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { useTheme } from '@emotion/react';
@@ -10,6 +10,7 @@ import battery1 from './Address/battery.svg';
 import glassissue from './Address/glassissue.svg';
 import { useDispatch } from 'react-redux';
 import { setIssueValue } from '../reduxstore';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 const useStyles = makeStyles({
     cardpre: {
@@ -84,6 +85,12 @@ const SelectIssue = () => {
   state : {issues : issuearray}
  })
 
+    };
+
+    const handleclickremove = (index) => {
+     let array1 = issuearray.slice();
+     array1.splice(index,1);
+     setissuearray(array1);
     }
     const issues1 = [
         {
@@ -112,11 +119,24 @@ const SelectIssue = () => {
             'The mic on my device is not working and needs to be replaced.',
           img : battery1,
         },
+        {
+          name: 'Charging port Replacement',
+          description:
+            'The Charging port on my needs to be replaced.',
+          img : glassissue,
+
+        },
+        {
+          name: 'Mic Replacement',
+          description:
+            'The mic on my device is not working and needs to be replaced.',
+          img : battery1,
+        },
        ]
     return(
         <Box sx={{marginTop:theme.spacing(2), marginBottom:'50px',display:'flex', justifyContent:'center',flexDirection:'column', alignItems:'center'}}>
             <Typography variant='h4'>Select Issue</Typography>
-<Grid container sx={{display:'flex', justifyContent:'space-between', width:'95%', marginTop:theme.spacing(1)}}>
+<Grid container sx={{display:'flex', justifyContent:'space-between', width:'95%', marginTop:theme.spacing(1), marginBottom : '60px'}}>
     
 {
             issues1.map((issue) => (
@@ -147,13 +167,15 @@ const SelectIssue = () => {
 </Grid>
 
        {
-        issuearray.length>0 ?  <Grid container sx={{display:'flex', alignItems:'center', justifyContent:'space-between', position:'absolute', bottom:'54px', padding:theme.spacing(2), borderRadius: '10px 10px 0px 0px',
+        issuearray.length>0 ?  
+        <Grid container sx={{display:'flex', alignItems:'center', justifyContent:'space-between', position:'absolute', bottom:'54px', padding:theme.spacing(2), borderRadius: '10px 10px 0px 0px',
         background: '#D9D9D9'}}>
            <Box sx={{display:'flex', flexDirection:'column'}} >
           {
-          issuearray.map((isue)=>(
+          issuearray.map((isue, index)=>(
             <Box sx={{display:'flex', flexDirection:'row', alignItems:'center'}} >
               <Typography variant='body1'><AddIcon sx={{fontSize:'10px'}}/>{isue}</Typography>
+              <IconButton onClick={() => handleclickremove()}><HighlightOffIcon sx={{color : "#000"}}/></IconButton>
             </Box>
           ))
         }</Box>
